@@ -6,16 +6,8 @@
  */
 class AcliModelDeploy extends JModelBase
 {
-	private $root = '';
-
-	private $sourceDir = '';
-
-	private $targetDir = '';
-
-	private $target = '';
-
 	/**
-	 * @var JApplicationCli
+	 * @var AcliApplicationCli
 	 */
 	private $application;
 
@@ -47,7 +39,8 @@ class AcliModelDeploy extends JModelBase
 			->createConfig()
 			->cleanup()
 			->applyPatches()
-			->openInBrowser();
+			->openInBrowser()
+			->displayResult();
 
 		$this->out()
 			->out(sprintf('Finished'));
@@ -61,40 +54,95 @@ class AcliModelDeploy extends JModelBase
 	 */
 	private function setup()
 	{
+		$applicationList = AcliApplicationHelper::getApplicationList();
+
+		//-- Application
 		$targetApplication = $this->state->get('application');
-		$version = $this->state->get('version');
 
-		$this->root = $this->state->get('httpRoot');
-		$this->target = $this->state->get('target');
+		if (!$targetApplication)
+		{
+			$targetApplication = $this->application->getUserInput('Application to build'
+				, 'mchoice', array_keys($applicationList));
 
-		$applicationList = AcliApplicationHelper::getApplicationList($this->state);
+			//-- Reload config
+			$cfg = new JRegistry(AcliApplicationHelper::fetchConfigurationData($targetApplication));
 
-		$this->sourceDir = PATH_REPOSITORIES . '/' . $targetApplication . '/' . $version;
-		$this->targetDir = $this->root . '/' . $this->target;
-
-		$this->out()
-			->out(sprintf('Application:      %s', $targetApplication))
-			->out(sprintf('Version:          %s', $version))
-			->out(sprintf('Source directory: %s', $this->sourceDir))
-			->out(sprintf('Target directory: %s', $this->targetDir))
-			->out();
+			AcliApplicationHelper::getOverrides($cfg);
+			$this->state = $cfg;
+		}
 
 		if (!array_key_exists($targetApplication, $applicationList))
 			throw new Exception(sprintf('Unknown application: %s', $targetApplication));
 
+		//-- Version
+		$version = $this->state->get('version');
+
+		if (!$version)
+		{
+			$version = $this->application->getUserInput('Select a version'
+				, 'mchoice', array_keys($applicationList[$targetApplication]->versions));
+
+			$this->state->set('version', $version);
+		}
+
 		if (!array_key_exists($version, $applicationList[$targetApplication]->versions))
 			throw new Exception('Invalid version', 1);
 
-		if (!JFolder::exists($this->root))
+//		$updaterepo = $this->application->input->get('updaterepo');
+
+		if ('development' == $version)
+		{
+			if ('0' === $this->application->getUserInput('Update the repository ?', 'yesno', array(), false))
+			{
+				$this->application->input->set('updaterepo', 1);
+//				$this->state->set('updaterepo', 1);
+			}
+		}
+
+		//-- http root
+		$root = $this->state->get('httpRoot');
+
+		if (!$root)
+		{
+			$root = $this->application->getUserInput('The http root directory:');
+
+			$this->state->set('httpRoot', $root);
+		}
+
+		if (!JFolder::exists($root))
 			throw new Exception('Invalid httpRoot path', 1);
 
-		if (JFolder::exists($this->targetDir))
+		//-- Target
+		$target = $this->application->input->get('target');
+
+		if (!$target)
+			$target = $this->application->getUserInput('The name of the target directory:');
+
+		$this->state->set('target', $target);
+
+
+		$targetDir = $root . '/' . $target;
+
+		if (JFolder::exists($targetDir))
 			throw new Exception('The target directory must not exist', 1);
 
-		$className = 'AcliApplicationInterface'
-			. ucfirst($targetApplication);
+		$sourceDir = PATH_REPOSITORIES . '/' . $targetApplication . '/' . $version;
 
-		$this->interface = new $className($this->state, $this->sourceDir, $this->targetDir);
+		$this->state->set('sourceDir', $sourceDir);
+		$this->state->set('targetDir', $targetDir);
+
+		$message = array();
+
+		$message[] = sprintf('Application:      %s', $targetApplication);
+		$message[] = sprintf('Version:          %s', $version);
+		$message[] = sprintf('Source directory: %s', $sourceDir);
+		$message[] = sprintf('Target directory: %s', $targetDir);
+
+		$this->application->displayMessage(implode("\n", $message));
+
+		$className = 'AcliApplicationInterface' . ucfirst($targetApplication);
+
+		$this->interface = new $className($this->state);
 
 		$this->interface->checkSourceDirectory($applicationList[$targetApplication]->versions[$version]);
 
@@ -109,7 +157,7 @@ class AcliModelDeploy extends JModelBase
 	{
 		$this->out('Copying files...', false);
 
-		if (!JFolder::copy($this->sourceDir, $this->targetDir))
+		if (!JFolder::copy($this->state->get('sourceDir'), $this->state->get('targetDir')))
 		{
 			//@todo legacy
 			throw new Exception(JError::getError(), 1);
@@ -156,6 +204,13 @@ class AcliModelDeploy extends JModelBase
 		return $this;
 	}
 
+	private function displayResult()
+	{
+		$this->application->displayMessage($this->interface->getResultMessage());
+
+		return $this;
+	}
+
 	/**
 	 * Applying patches.
 	 *
@@ -166,6 +221,7 @@ class AcliModelDeploy extends JModelBase
 		$this->out('Applying patches...');
 
 		$patches = (array) $this->state->get('patches', array());
+		$targetDir = $this->state->get('targetDir');
 
 		foreach ($patches as $patchName)
 		{
@@ -180,7 +236,7 @@ class AcliModelDeploy extends JModelBase
 				continue;
 			}
 
-			system("patch -d \"$this->targetDir\" -p0 < \"$patchFile\"");
+			system("patch -d \"$targetDir\" -p0 < \"$patchFile\"");
 		}
 
 		$this->out('ok');
@@ -198,6 +254,7 @@ class AcliModelDeploy extends JModelBase
 		$browserBin = $this->state->get('browserBin');
 		$httpBase = $this->state->get('httpBase');
 		$links = $this->interface->getBrowserLinks();
+		$target = $this->state->get('target');
 
 		if ($this->application instanceof JApplicationWeb)
 		{
@@ -205,8 +262,8 @@ class AcliModelDeploy extends JModelBase
 
 			foreach ($links as $linkTitle => $linkUrl)
 			{
-				$this->out('<a href="' . $httpBase . '/' . $this->target . $linkUrl . '">'
-					. $this->target . $linkTitle . '</a>');
+				$this->out('<a href="' . $httpBase . '/' . $target . $linkUrl . '">'
+					. $target . $linkTitle . '</a>');
 			}
 		}
 		else
@@ -219,7 +276,7 @@ class AcliModelDeploy extends JModelBase
 				{
 					$this->out('Open ' . $linkTitle);
 
-					system($browserBin . ' ' . $httpBase . '/' . $this->target . $linkUrl . ' &');
+					system($browserBin . ' ' . $httpBase . '/' . $target . $linkUrl . ' &');
 				}
 			}
 			else
@@ -237,8 +294,7 @@ class AcliModelDeploy extends JModelBase
 	 *
 	 * @return AcliModelDeploy
 	 */
-	private
-	function out($text = '', $nl = true)
+	private function out($text = '', $nl = true)
 	{
 		$this->application->out($text, $nl);
 

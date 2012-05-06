@@ -49,14 +49,12 @@ class AcliApplicationInterfaceJoomlacms extends AcliApplicationInterface
 	}
 
 	/**
-	 * @param $path
-	 *
 	 * @return \AcliApplicationInterfaceJoomlacms
 	 * @throws Exception
 	 */
 	public function createConfig()
 	{
-		$path = $this->targetDir;
+		$path = $this->config->get('targetDir');
 		// Create a new registry to build the configuration options.
 		$registry = new stdClass;
 
@@ -178,7 +176,9 @@ class AcliApplicationInterfaceJoomlacms extends AcliApplicationInterface
 
 	/**
 	 * @static
+	 *
 	 * @param array $a
+	 *
 	 * @return string
 	 */
 	private static function getArrayString(array $a)
@@ -213,22 +213,20 @@ class AcliApplicationInterfaceJoomlacms extends AcliApplicationInterface
 		// TODO: Implement cleanup() method.
 		$this->out('Deleting installation directory...', false);
 
-		if (!JFolder::delete($this->targetDir . '/installation'))
+		if (!JFolder::delete($this->config->get('targetDir') . '/installation'))
 			throw new Exception(JError::getError(), 1);
 
 		$this->out('ok');
 
 		return $this;
-
 	}
 
 	public function setupDatabase()
 	{
-		// TODO: Implement setupDatabase() method.
-		$installSql = $this->sourceDir . '/installation/sql/mysql/joomla.sql';
+		$installSql = $this->config->get('targetDir') . '/installation/sql/mysql/joomla.sql';
 
 		if (!file_exists($installSql))
-			throw new Exception('Install SQL file not found in ' . $installSql, 1);
+			throw new Exception(__METHOD__ . ' - Install SQL file not found in ' . $installSql, 1);
 
 		$this->config->set('site_name', 'TEST ' . $this->config->get('target'));
 		$this->config->set('db_name', $this->config->get('target'));
@@ -247,6 +245,7 @@ class AcliApplicationInterfaceJoomlacms extends AcliApplicationInterface
 		$this->createAdminUser($dbModel);
 		$this->out('ok');
 
+		return $this;
 	}
 
 	public function getBrowserLinks()
@@ -254,5 +253,26 @@ class AcliApplicationInterfaceJoomlacms extends AcliApplicationInterface
 		return array(
 			'Site' => '',
 			'Administrator' => '/administrator');
+	}
+
+	/**
+	 * Displays a result message.
+	 *
+	 * @return AcliApplicationInterface
+	 */
+	public function getResultMessage()
+	{
+		// TODO: Implement displayResult() method.
+
+		$message = array();
+
+		$message[] = '';
+		$message[] = 'Your Joomla! CMS has been installed succesfully.';
+		$message[] = '';
+		$message[] = 'Credentials:';
+		$message[] = 'Admin user     : ' . $this->config->get('admin_user');
+		$message[] = 'Admin password : ' . $this->config->get('admin_password');
+
+		return implode("\n", $message);
 	}
 }

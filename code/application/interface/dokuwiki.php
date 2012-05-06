@@ -16,15 +16,8 @@ class AcliApplicationInterfaceDokuwiki extends AcliApplicationInterface
 	{
 		jimport('joomla.filesystem.file');
 
-		$path = $this->targetDir;
-
-		$cfg = new stdClass;
-		$cfg->title = $this->config->get('site_name');
-		$cfg->lang = 'de';
-		$cfg->license = 0;
-		$cfg->useacl = 1;
-		$cfg->policy = 0;
-		//$cfg->htmlok = 1;
+		$config = $this->config;
+		$path = $config->get('targetDir');
 
 		$now = gmdate('r');
 		$buffer = <<<EOT
@@ -36,11 +29,11 @@ class AcliApplicationInterfaceDokuwiki extends AcliApplicationInterface
  */
 
 EOT;
-		$buffer .= '$conf[\'title\'] = \'' . addslashes($cfg->title) . "';\n";
-		$buffer .= '$conf[\'lang\'] = \'' . addslashes($cfg->lang) . "';\n";
-		$buffer .= '$conf[\'license\'] = \'' . addslashes($cfg->license) . "';\n";
+		$buffer .= '$conf[\'title\'] = \'' . addslashes($config->get('site_name')) . "';\n";
+		$buffer .= '$conf[\'lang\'] = \'' . addslashes($config->get('lang')) . "';\n";
+		$buffer .= '$conf[\'license\'] = \'' . addslashes($config->get('license')) . "';\n";
 
-		if ($cfg->useacl)
+		if ($config->get('useacl'))
 		{
 			$buffer .= '$conf[\'useacl\'] = 1' . ";\n";
 			$buffer .= "\$conf['superuser'] = '@admin';\n";
@@ -53,16 +46,16 @@ EOT;
 		 * Create admin user
 		 */
 
-		if (!$cfg->useacl)
+		if (!$config->get('useacl'))
 			return $this;
 
 		// create users.auth.php
 		// --- user:MD5password:Real Name:email:groups,comma,seperated
 		$output = join(":", array(
-			$this->config->get('admin_user'),
-			md5($this->config->get('admin_password')),
-			$this->config->get('admin_fullname'),
-			$this->config->get('admin_email'),
+			$config->get('admin_user'),
+			md5($config->get('admin_password')),
+			$config->get('admin_fullname'),
+			$config->get('admin_email'),
 			'admin,user'
 		));
 
@@ -70,7 +63,6 @@ EOT;
 
 		if (!file_put_contents($path . '/conf/users.auth.php', $buffer))
 			throw new Exception('Unable to write users.auth.php', 1);
-//		$ok = $ok && fileWrite(DOKU_LOCAL . 'users.auth.php', $output);
 
 		// create acl.auth.php
 		$buffer = <<<EOT
@@ -84,12 +76,12 @@ EOT;
 # Date: $now
 
 EOT;
-		if ($cfg->policy == 2)
+		if ($config->get('policy') == 2)
 		{
 			$buffer .= "*               @ALL          0\n";
 			$buffer .= "*               @user         8\n";
 		}
-		elseif ($cfg->policy == 1)
+		elseif ($config->get('policy') == 1)
 		{
 			$buffer .= "*               @ALL          1\n";
 			$buffer .= "*               @user         8\n";
@@ -99,7 +91,6 @@ EOT;
 			$buffer .= "*               @ALL          8\n";
 		}
 
-		//$ok = $ok && fileWrite(DOKU_LOCAL . 'acl.auth.php', $output);
 		if (!file_put_contents($path . '/conf/acl.auth.php', $buffer))
 			throw new Exception('Unable to write acl.auth.php', 1);
 
@@ -119,5 +110,12 @@ EOT;
 	public function getBrowserLinks()
 	{
 		return array('Wiki' => '');
+	}
+
+	public function displayResult()
+	{
+		// TODO: Implement displayResult() method.
+
+		return $this;
 	}
 }

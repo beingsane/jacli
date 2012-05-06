@@ -16,7 +16,7 @@ class AcliApplicationHelper
 		}
 
 		// Set the configuration file path for the application.
-		if (file_exists(JPATH_CONFIGURATION . '/configuration.phpx'))
+		if (file_exists(JPATH_CONFIGURATION . '/configuration.php'))
 		{
 			$file = JPATH_CONFIGURATION . '/configuration.php';
 		}
@@ -31,7 +31,7 @@ class AcliApplicationHelper
 			throw new RuntimeException('Configuration file does not exist or is unreadable.', 1);
 		}
 
-		include $file;
+		include_once $file;
 
 		$config = new JConfig;
 
@@ -39,7 +39,7 @@ class AcliApplicationHelper
 
 		if ($targetApplication)
 		{
-			$path = JPATH_CONFIGURATION . '/application/'.$targetApplication;
+			$path = JPATH_CONFIGURATION . '/application/' . $targetApplication;
 
 			$file = '';
 
@@ -78,6 +78,7 @@ class AcliApplicationHelper
 
 			if (is_object($v) || is_array($v))
 			{
+				//@todo override for objects...
 				//$this->out('  --' . $k);
 
 				//if (!count($v))
@@ -100,12 +101,21 @@ class AcliApplicationHelper
 			}
 		}
 
-		$path = $config->get('sourcesPath');
+	//	$path = $config->get('sourcesPath');
 
-		define('PATH_REPOSITORIES', $path ? : dirname(JPATH_BASE) . '/repositories');
+		defined('PATH_REPOSITORIES') || define('PATH_REPOSITORIES'
+		, $config->get('sourcesPath')
+			? : dirname(JPATH_BASE) . '/repositories');
 	}
 
-	public static function getApplicationList(JRegistry $config)
+	/**
+	 * Get a list of known applications.
+	 *
+	 * @static
+	 * @return array
+	 * @throws Exception
+	 */
+	public static function getApplicationList()
 	{
 		static $applicationList = array();
 

@@ -106,7 +106,6 @@ class AcliModelDownloader extends JModelBase
 
 			if (0 != $status)
 				throw new Exception(__METHOD__ . ' - Export failed', $status);
-
 		}
 
 		return $this;

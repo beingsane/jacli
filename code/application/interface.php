@@ -16,10 +16,6 @@ abstract class AcliApplicationInterface
 	 */
 	protected $name = '';
 
-	protected $sourceDir = '';
-
-	protected $targetDir = '';
-
 	public function __construct(JRegistry $config)
 	{
 		$this->config = $config;
@@ -32,6 +28,13 @@ abstract class AcliApplicationInterface
 	abstract public function cleanup();
 
 	abstract public function setupDatabase();
+
+	/**
+	 * Displays a result message.
+	 *
+	 * @return AcliApplicationInterface
+	 */
+	abstract public function getResultMessage();
 
 	abstract public function getBrowserLinks();
 
@@ -77,6 +80,8 @@ abstract class AcliApplicationInterface
 	/**
 	 * @param string $string
 	 * @param bool $nl
+	 *
+	 * @return \AcliApplicationInterface
 	 */
 	protected function out($string = '', $nl = true)
 	{
@@ -90,6 +95,8 @@ abstract class AcliApplicationInterface
 		{
 			echo $string;
 		}
+
+		return $this;
 	}
 
 }
