@@ -20,11 +20,9 @@ abstract class AcliApplicationInterface
 
 	protected $targetDir = '';
 
-	public function __construct(JRegistry $config, $source, $target)
+	public function __construct(JRegistry $config)
 	{
 		$this->config = $config;
-		$this->sourceDir = $source;
-		$this->targetDir = $target;
 	}
 
 	abstract public function createAdminUser(AcliModelDatabase $db);
@@ -37,33 +35,49 @@ abstract class AcliApplicationInterface
 
 	abstract public function getBrowserLinks();
 
+	/**
+	 * @param SimpleXMLElement $version
+	 * @return AcliApplicationInterface
+	 * @throws Exception
+	 */
 	public function checkSourceDirectory(SimpleXMLElement $version)
 	{
 		$downloader = new AcliModelDownloader($this->config);
+		$sourceDir = $this->config->get('sourceDir');
 
 		switch ($version->type)
 		{
 			case 'download';
-				if (!JFolder::exists($this->sourceDir))
+				if (!JFolder::exists($sourceDir))
 				{
-					$downloader->download($this->sourceDir, $version);
+					$downloader->download($sourceDir, $version);
 				}
 
 				break;
 
 			case 'git':
-				$downloader->checkoutGit($this->sourceDir, $version);
+				$downloader->checkoutGit($sourceDir, $version);
+
+				break;
+
+			case 'svn':
+				$downloader->checkoutSVN($sourceDir, $version);
+				$this->config->set('sourceDir', $sourceDir . '/export');
 
 				break;
 
 			default:
-				throw new Exception(sprintf('%s - unknown repository type: %s'
+				throw new Exception(sprintf('%s - Unknown repository type: %s'
 					, __METHOD__, $version->type), 1);
 		}
 
 		return $this;
 	}
 
+	/**
+	 * @param string $string
+	 * @param bool $nl
+	 */
 	protected function out($string = '', $nl = true)
 	{
 		$application = JFactory::getApplication();

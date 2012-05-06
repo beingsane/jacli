@@ -24,9 +24,9 @@ class AcliModelDownloader extends JModelBase
 		/* @var JApplicationCli $application */
 		$application = JFactory::getApplication();
 
+		//@todo OS specific
 		$parts = explode('/', $dir);
 
-		//@todo OS specific
 		$subDir = array_pop($parts);
 		$path = implode('/', $parts);
 
@@ -62,25 +62,60 @@ class AcliModelDownloader extends JModelBase
 	/**
 	 * SVN checkout.
 	 *
-	 * @todo implement
+	 * @param string           $dir
+	 * @param SimpleXMLElement $version
+	 *
+	 * @throws Exception
+	 * @return \AcliModelDownloader
 	 */
-	private function checkoutSVN()
+	public function checkoutSVN($dir, SimpleXMLElement $version)
 	{
-		echo 'Checking out the Joomla! trunk to:' . NL . $BASE . DS . $jTrunkDir . NL;
-		$JSVN = 'http://joomlacode.org/svn/joomla/development/trunk';
-		passthru('svn co ' . $JSVN . ' "' . $BASE . DS . $jTrunkDir . '"');
+		/* @var JApplicationCli $application */
+		$application = JFactory::getApplication();
 
-		/*
-		 * SVN export
-		 */
-		echo "Exporting the Joomla! trunk to $theDir...";
-		passthru('svn export "' . $BASE . DS . $jTrunkDir . '" "' . $BASE . DS . $theDir . '"');
+		$application->out('Checking out from SVN...');
 
+		if (JFolder::exists($dir))
+		{
+			if ($application->input->get('updaterepo'))
+			{
+				$application->out('Updating SVN repository...');
+
+				passthru("cd \"$dir\" && svn up");
+			}
+			else
+			{
+				$application->out('No update was requested (use --updaterepo)');
+			}
+		}
+		else
+		{
+			if (!JFolder::create($dir))
+				throw new Exception(__METHOD__ . ' - can not create folder: ' . JError::getError());
+
+			$application->out('Checking out SVN repository...');
+
+			passthru("cd $dir && svn co $version->url repository", $status);
+
+			if (0 != $status)
+				throw new Exception(__METHOD__ . ' - Checkout failed', $status);
+
+			$application->out('Exporting out SVN repository...');
+
+			passthru("svn export $dir/repository $dir/export", $status);
+
+			if (0 != $status)
+				throw new Exception(__METHOD__ . ' - Export failed', $status);
+
+		}
+
+		return $this;
 	}
 
 	/**
-	 * @param $dir
+	 * @param                  $dir
 	 * @param SimpleXMLElement $version
+	 *
 	 * @return AcliModelDownloader
 	 * @throws Exception
 	 */
