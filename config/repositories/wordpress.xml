@@ -1,0 +1,17 @@
+<repository>
+    <name>Wordpress</name>
+    <versions>
+        <version>
+            <version>3.3.2</version>
+            <type>download</type>
+            <url>http://wordpress.org/wordpress-3.3.2.zip</url>
+            <changelog></changelog>
+        </version>
+        <version>
+            <version>development</version>
+            <type>svn</type>
+            <url>http://core.svn.wordpress.org/trunk/</url>
+            <changelog></changelog>
+        </version>
+    </versions>
+</repository>
