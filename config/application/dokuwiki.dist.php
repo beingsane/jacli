@@ -7,6 +7,10 @@
 
 class AcliConfigDokuwiki extends JConfig
 {
+	public $lang = 'en';
+	public $license = 0;
+	public $useacl = 1;
+	public $policy = 0;
 
 	// Admin user credentials
 	public $admin_user = 'admin';
@@ -14,7 +18,6 @@ class AcliConfigDokuwiki extends JConfig
 	public $admin_password = 'test';
 	public $admin_email = 'demo@example.com';
 
-// http://localhost
 	public $httpBase = 'http://joomla.tests';
 
 	public $patchDir = '';
