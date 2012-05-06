@@ -7,13 +7,22 @@
 class JConfig
 {
 	/**
-	 * The default application to build.
+	 * The default application to build (e.g. joomlacms).
+	 *
+	 * If left blank, a selector will be displayed.
+	 *
 	 * @var string
 	 */
-	public $application = 'joomlacms';
+	public $application = '';
 
-	// The default version to build
-	public $version = '2.5.4';
+	/**
+	 * The default version to build (e.g. development).
+	 *
+	 * If left blank, a selector will be displayed.
+	 *
+	 * @var string
+	 */
+	public $version = '';
 
 	/**
 	 * The path where to store the source codes.
@@ -32,7 +41,9 @@ class JConfig
 
 	/**
 	 * Path to git executable
+	 *
 	 * C:\path\to\git.exe
+	 *
 	 * @var string
 	 */
 	public $gitBin = 'git';
@@ -42,7 +53,7 @@ class JConfig
 	 *
 	 * If no interface is specified, the default terminal will be used.
 	 *
-	 * Possible values: KDE,
+	 * Possible values: CLI (default), KDE, Gnome, ...
 	 *
 	 * @var string
 	 */
@@ -50,12 +61,14 @@ class JConfig
 
 	/**
 	 * Web path to your workspace
+	 *
+	 * http://localhost
+	 *
 	 * @var string
 	 */
-	public $httpBase = 'http://localhost';
+	public $httpBase = '';
 
 	public $patchDir = '';
 
 	public $patches = array();
-
 }
