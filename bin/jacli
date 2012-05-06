@@ -1,0 +1,44 @@
+#!/usr/bin/php
+<?php
+/**
+ * Command line script to run the Application.
+ *
+ * @package    JACLI.Application
+ *
+ * @copyright  Copyright (C) {COPYRIGHT}. All rights reserved.
+ * @license    GNU General Public License version 2 or later; see LICENSE
+ */
+
+// Bootstrap the application.
+$path = getenv('JACLI_HOME');
+
+try
+{
+	if ($path)
+	{
+		require_once $path . '/bootstrap.php';
+	}
+	else
+	{
+		require_once realpath(__DIR__ . '/../code/bootstrap.php');
+	}
+
+	// Set all loggers to echo.
+	JLog::addLogger(array('logger' => 'echo'), JLog::ALL);
+
+	// Instantiate the application.
+	$application = JApplicationCli::getInstance('AcliApplicationCli');
+
+	// Store the application.
+	JFactory::$application = $application;
+
+	// Execute the application.
+	$application->execute();
+}
+catch (Exception $e)
+{
+	// An exception has been caught, just echo the message.
+	fwrite(STDOUT, "\n" . '*ERROR* : ' . $e->getMessage() . "\n");
+
+	exit($e->getCode());
+}

@@ -1,0 +1,17 @@
+<repository>
+    <name>dokuwiki</name>
+    <versions>
+        <version>
+            <version>2012-01-25a</version>
+            <type>download</type>
+            <url>http://www.splitbrain.org/_media/projects/dokuwiki/dokuwiki-2012-01-25a.tgz</url>
+            <changelog></changelog>
+        </version>
+        <version>
+            <version>development</version>
+            <type>git</type>
+            <url>git://github.com/splitbrain/dokuwiki.git</url>
+            <changelog></changelog>
+        </version>
+    </versions>
+</repository>
