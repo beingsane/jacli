@@ -8,12 +8,19 @@ class AcliApplicationInterfaceJoomlacms extends AcliApplicationInterface
 {
 	protected $name = 'joomla-cms';
 
+	/**
+	 * Create the admin user.
+	 *
+	 * @param AcliModelDatabase $db
+	 *
+	 * @return AcliApplicationInterfaceJoomlacms
+	 */
 	public function createAdminUser(AcliModelDatabase $db)
 	{
 		// TODO: Implement createAdminUser() method.
 		// Create random salt/password for the admin user
-		$salt = AcliModelPassword::genRandomPassword(32);
-		$crypt = AcliModelPassword::getCryptedPassword($this->config->get('admin_password'), $salt);
+		$salt = self::genRandomPassword(32);
+		$crypt = md5($this->config->get('admin_password') . $salt);
 		$cryptpass = $crypt . ':' . $salt;
 
 		// create the admin user
@@ -80,7 +87,7 @@ class AcliApplicationInterfaceJoomlacms extends AcliApplicationInterface
 
 		/* Server Settings */
 		$registry->live_site = '';
-		$registry->secret = AcliModelPassword::genRandomPassword(16);
+		$registry->secret = self::genRandomPassword(16);
 		$registry->gzip = 0;
 		$registry->error_reporting = -1;
 		$registry->helpurl = 'http://help.joomla.org/proxy/index.php'
@@ -207,6 +214,35 @@ class AcliApplicationInterfaceJoomlacms extends AcliApplicationInterface
 
 		return $s;
 	}
+
+	/**
+	 * Generate a random password.
+	 *
+	 * @param    int        $length    Length of the password to generate
+	 *
+	 * @return    string            Random Password
+	 */
+	private static function genRandomPassword($length = 8)
+	{
+		$salt = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+		$len = strlen($salt);
+		$makepass = '';
+
+		$stat = @stat(__FILE__);
+
+		if (empty($stat) || !is_array($stat))
+			$stat = array(php_uname());
+
+		mt_srand(crc32(microtime() . implode('|', $stat)));
+
+		for ($i = 0; $i < $length; $i++)
+		{
+			$makepass .= $salt[mt_rand(0, $len - 1)];
+		}
+
+		return $makepass;
+	}
+
 
 	public function cleanup()
 	{
