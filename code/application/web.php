@@ -17,6 +17,10 @@
  */
 class /*J*/AcliApplicationWeb extends JApplicationWeb
 {
+	protected $lists = array();
+
+	protected $cfg = array();
+
 	/**
 	 * Overrides the parent doExecute method to run the web application.
 	 *
@@ -28,24 +32,114 @@ class /*J*/AcliApplicationWeb extends JApplicationWeb
 	 */
 	protected function doExecute()
 	{
+		$do = $this->input->get('do');
+
+		switch ($do)
+		{
+			case 'getAppConfig':
+				$resp = new stdClass;
+				$resp->text = AcliApplicationHelper::parseAppConfig($this->input->get('app'));
+				$resp->status = 0;
+
+
+
+				echo json_encode($resp);
+
+				return;
+				break;
+		}
+
 		$this->config->set('target', $this->input->get('target'));
-//var_dump(AcliApplicationHelper::getApplicationList($this->config));
+
+		//---View start
+
+		$apps = array(array('items' => array('Select...')));
+
+		foreach (AcliApplicationHelper::getApplicationList() as $afile => $app)
+		{
+			$vs = array();
+
+			foreach ($app->versions as $version)
+			{
+				$vs[$afile . '|' . $version->version] = (string) $version->version;
+			}
+
+			$apps[] = array('text' => $app->name, 'items' => $vs);
+		}
+
+		$options['list.attr'] = 'onchange="Jacli.changeApp(this, \'appConfig\');"';
+		$this->lists['appversion'] = JHtml::_('select.groupedlist', $apps, 'appversion', $options);
+
+		$this->cfg = array();
+
+		foreach ($this->config->toObject() as $k => $v)
+		{
+			if (in_array($k, array('application', 'version', 'target', 'execution', 'uri',)))
+				continue;
+
+			$this->cfg[$k] = $v;
+		}
+
+		//---View end
+
 		ob_start();
 
-		include __DIR__ . '/tpl/deployoptions.php';
+		include JACLI_PATH_TEMPLATE . '/default.php';
 
 		$html = ob_get_clean();
 
 		$this->appendBody($html);
 	}
 
-	protected function fetchConfigurationData($file = '', $class = 'JConfig')
-	{
-		return AcliApplicationHelper::fetchConfigurationData();
-	}
-
+	/**
+	 * Output a string.
+	 *
+	 * @param string $text
+	 * @param bool $nl
+	 */
 	public function out($text = '', $nl = true)
 	{
-		echo ($nl) ? $text.'<br />' : $text;
+		echo ($nl) ? $text . '<br />' : $text;
 	}
+
+	/**
+	 * Get a value from the user using the given user interface.
+	 *
+	 * @param        $message
+	 * @param string $type
+	 * @param array  $values
+	 * @param bool   $required
+	 *
+	 * @return mixed|string
+	 * @throws Exception
+	 */
+	public function getUserInput($message, $type = 'text', array $values = array(), $required = true)
+	{
+		return __METHOD__ . '---Missing value---' . $message;
+		$retVal = $this->userInterface->getUserInput($message, $type, $values);
+
+		$retVal = trim($retVal);
+
+		if (!$retVal && $required)
+			throw new Exception('User abort', 666);
+
+		return $retVal;
+	}
+
+	/**
+	 * Fetch the configuration data for the application.
+	 *
+	 * @param string $file
+	 * @param string $class
+	 *
+	 * @throws RuntimeException
+	 * @return  object  An object to be loaded into the application configuration.
+	 *
+	 * @since   1.0
+	 */
+	protected function fetchConfigurationData($file = '', $class = 'JConfig')
+	{
+		return AcliApplicationHelper::fetchConfigurationData($this->input->get('application'));
+	}
+
 }

@@ -8,6 +8,8 @@
 // Bootstrap the application.
 $path = getenv('JACLI_HOME');
 
+define('JACLI_PATH_TEMPLATE', __DIR__.'/template');
+
 try
 {
 	if ($path)

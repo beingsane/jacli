@@ -6,7 +6,7 @@
  */
 
 /**
- *
+ * @todo let JDatabaseXXX do this stuff ;)
  */
 class AcliModelDatabase extends JModelBase
 {

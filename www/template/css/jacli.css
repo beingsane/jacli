@@ -1,0 +1,13 @@
+div.well ul {
+    list-style: none;
+    margin: 0;
+}
+
+div.well label:hover {
+    /*background-color: #fff;*/
+}
+
+div.buttonbox {
+    margin: 1em;
+    text-align: center;
+}

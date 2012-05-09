@@ -101,7 +101,7 @@ class AcliApplicationHelper
 			}
 		}
 
-	//	$path = $config->get('sourcesPath');
+		//	$path = $config->get('sourcesPath');
 
 		defined('PATH_REPOSITORIES') || define('PATH_REPOSITORIES'
 		, $config->get('sourcesPath')
@@ -153,4 +153,48 @@ class AcliApplicationHelper
 		return $applicationList;
 	}
 
+	public static function parseAppConfig($app)
+	{
+		$path = JPATH_CONFIGURATION . '/application/' . $app . '.dist.php';
+
+		if( ! file_exists($path))
+			throw new Exception(__METHOD__.' - File not found: ' . $path);
+
+		require $path;
+
+		$className = 'AcliConfig' . ucfirst($app);
+
+		if (!class_exists($className))
+		throw new Exception(__METHOD__ . 'Config class not found: ' . $className);
+
+		$cfg = new $className;
+
+		$html = array();
+
+		$html[] = '<h3>Application configuration</h3>';
+
+		$html[] = '<ul>';
+
+		$blacks = array('application', 'version', 'interface', 'gitBin', 'browserBin',);
+
+		foreach ($cfg as $k => $v)
+		{
+			if(in_array($k, $blacks))
+				continue;
+
+			$html[] = '<li>';
+			$html[] = '<label for="' . $k . '">' . ucfirst($k) . '</label>';
+			$html[] = '<input id="' . $k . '" name="' . $k . '" value="' . $v . '"/>';
+			$html[] = '</li>';
+		}
+
+		$html[] = '</ul>';
+
+		return implode("\n", $html);
+
+
+		$xml = JFactory::getXML($path);
+	}
+
 }
+
