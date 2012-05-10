@@ -294,7 +294,7 @@ class AcliApplicationInterfaceJoomlacms extends AcliApplicationInterface
 	/**
 	 * Displays a result message.
 	 *
-	 * @return AcliApplicationInterface
+	 * @return array
 	 */
 	public function getResultMessage()
 	{
@@ -308,7 +308,8 @@ class AcliApplicationInterfaceJoomlacms extends AcliApplicationInterface
 		$message[] = 'Credentials:';
 		$message[] = 'Admin user     : ' . $this->config->get('admin_user');
 		$message[] = 'Admin password : ' . $this->config->get('admin_password');
+		$message[] = '';
 
-		return implode("\n", $message);
+		return $message;
 	}
 }

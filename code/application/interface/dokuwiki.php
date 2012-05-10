@@ -112,10 +112,25 @@ EOT;
 		return array('Wiki' => '');
 	}
 
-	public function displayResult()
+	/**
+	 * Displays a result message.
+	 *
+	 * @return array
+	 */
+	public function getResultMessage()
 	{
-		// TODO: Implement displayResult() method.
+		// TODO: Implement getResultMessage() method.
 
-		return $this;
+		$message = array();
+
+		$message[] = '';
+		$message[] = 'Your Dokuwiki has been installed succesfully.';
+		$message[] = '';
+		$message[] = 'Credentials:';
+		$message[] = 'Admin user     : ' . $this->config->get('admin_user');
+		$message[] = 'Admin password : ' . $this->config->get('admin_password');
+		$message[] = '';
+
+		return $message;
 	}
 }

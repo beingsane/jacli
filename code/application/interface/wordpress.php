@@ -59,10 +59,21 @@ class AcliApplicationInterfaceWordpress extends AcliApplicationInterface
 	/**
 	 * Displays a result message.
 	 *
-	 * @return AcliApplicationInterface
+	 * @return array
 	 */
-	public function displayResult()
+	public function getResultMessage()
 	{
-		// TODO: Implement displayResult() method.
+		// TODO: Implement getResultMessage() method.
+		$message = array();
+
+		$message[] = '';
+		$message[] = 'Wordpress has been installed succesfully.';
+		$message[] = '';
+		$message[] = 'Credentials:';
+		$message[] = 'Admin user     : ' . $this->config->get('admin_user');
+		$message[] = 'Admin password : ' . $this->config->get('admin_password');
+		$message[] = '';
+
+		return $message;
 	}
 }

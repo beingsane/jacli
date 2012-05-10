@@ -51,7 +51,7 @@ class AcliUserinterfaceGnome extends AcliUserinterface
 	/**
 	 * Display an error message.
 	 *
-	 * @param string $message
+	 * @param mixed $message array or string
 	 * @param string $type
 	 *
 	 * @throws UnexpectedValueException
@@ -59,7 +59,7 @@ class AcliUserinterfaceGnome extends AcliUserinterface
 	 */
 	public function displayMessage($message, $type = 'message')
 	{
-		$gType = '';
+		$message =  implode("\n", (array) $message);
 
 		switch($type)
 		{
@@ -79,6 +79,7 @@ class AcliUserinterfaceGnome extends AcliUserinterface
 				throw new UnexpectedValueException(__METHOD__ . ' - Invalid message type');
 		}
 
+		// Display the message
 		shell_exec("zenity --$gType --text=\"$message\"");
 
 		return $this;

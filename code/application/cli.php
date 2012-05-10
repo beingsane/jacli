@@ -40,7 +40,7 @@ AcliApplicationCli extends JApplicationCli
 			return;
 		}
 
-		$className = 'AcliUserinterface' . ucfirst($this->config->get('interface'));
+		$className = 'AcliUserinterface' . ucfirst($this->config->get('interface', 'cli'));
 
 		$this->userInterface = new $className;
 
@@ -48,7 +48,24 @@ AcliApplicationCli extends JApplicationCli
 		{
 			$model = new AcliModelDeploy($this->config);
 
-			$model->deploy();
+			if($this->input->get('listtargets'))
+			{
+				$model->listTargets();
+			}
+			elseif($this->input->get('deletetarget'))
+			{
+				$model->deleteTarget();
+			}
+			elseif($this->input->get('listapps'))
+			{
+				$model->listApplications();
+			}
+			else
+			{
+				$model->deploy();
+
+			}
+
 		}
 		catch (Exception $e)
 		{
@@ -86,6 +103,11 @@ AcliApplicationCli extends JApplicationCli
 		$this->out('  -h  --help   Prints this usage information.');
 		$this->out('  -q  --quiet  Do not produce any output (except errors).');
 		$this->out();
+		$this->out('  --install  Install an application - This is the default action.');
+		$this->out('  --listtargets  Lists all targets under the given httpRoot.');
+		$this->out('  --deletetarget <target>  Deletes a target.');
+		$this->out('  --listapps  Lists all known applications.');
+		$this->out();
 		$this->out('Required:');
 		$this->out('  --target  Specify a target directory.');
 		$this->out();
@@ -114,11 +136,18 @@ AcliApplicationCli extends JApplicationCli
 			}
 		}
 
+		if ('' == $this->config->get('application'))
+		{
+			$this->out();
+			$this->out('!! NOTE !! For application specific overrides use: jacli --help --application <application>');
+		}
+
 		$this->out();
 		$this->out('Optional:');
 		$this->out('  --updaterepo  Update the repository (if applicable)');
 
 		$this->out();
+		$this->out(str_repeat('_', 80));
 		$this->out('Examples:');
 		$this->out();
 		$this->out('jacli --target test1');
@@ -166,7 +195,7 @@ AcliApplicationCli extends JApplicationCli
 	/**
 	 * Displays a message using the given user interface.
 	 *
-	 * @param $message
+	 * @param mixed $message array or string
 	 * @param string $type
 	 * @return AcliApplicationCli
 	 */

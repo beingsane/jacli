@@ -48,6 +48,123 @@ class AcliModelDeploy extends JModelBase
 		return $this;
 	}
 
+	public function listTargets()
+	{
+		$root = $this->checkRootPath();
+
+		$targets = JFolder::folders($root);
+
+		$this->application->out('Targets on: ' . $root);
+
+		$this->application->out(print_r($targets, 1));
+	}
+
+	/**
+	 * Get a list of installed applications.
+	 *
+	 * @return AcliModelDeploy
+	 */
+	public function listApplications()
+	{
+		$list = AcliApplicationHelper::getApplicationList();
+
+		$message = array();
+
+		$message[] = 'Installed Applications';
+		$message[] = '';
+
+		foreach ($list as $app)
+		{
+			$message[] = $app->name;
+
+			foreach ($app->versions as $version)
+			{
+				$message[] = '  ' . $version->version . ' (' . $version->type . ')';
+			}
+		}
+
+		$message[] = '';
+
+		$this->application->displayMessage($message);
+
+		return $this;
+	}
+
+	public function deleteTarget()
+	{
+		$root = $this->checkRootPath();
+		$target = $this->application->input->get('target');
+
+		if (!$target)
+			$target = $this->getUserInput('target', 'The name of the target directory:');
+
+		$targetDir = $root . '/' . $target;
+
+		if ( ! JFolder::exists($targetDir))
+			throw new Exception('The target directory does not exist', 1);
+
+		$model = new AcliModelDatabase($this->state);
+
+		$this->application->out(sprintf('Deleting target: %s', $target));
+
+		try
+		{
+			$this->application->out('Deleting the database');
+			$model->deleteDb($target);
+		}
+		catch(UnexpectedValueException $e)
+		{
+			$this->application->out('A database has not been found !');
+			//throw new Exception($e);
+		}
+
+		$this->application->out(sprintf('Deleting the folder: %s', $targetDir));
+
+		if( ! JFolder::delete($targetDir))
+			throw new Exception(JError::getError());
+
+		$this->application->out('The target has been deleted');
+	}
+
+	/**
+	 * @return mixed|string
+	 * @throws Exception
+	 */
+	private function checkRootPath()
+	{
+		$root = $this->getUserInput('httpRoot', 'The http root directory');
+
+		if (!JFolder::exists($root))
+			throw new Exception('Invalid httpRoot path', 1);
+
+		return $root;
+	}
+
+	/**
+	 * Get input from the user.
+	 *
+	 * @param $vName
+	 * @param $message
+	 * @param string $type
+	 * @param array $values
+	 * @param bool $required
+	 *
+	 * @return mixed|string
+	 */
+	private function getUserInput($vName, $message, $type = 'text', array $values = array(), $required = true)
+	{
+		$v = $this->state->get($vName);
+
+		if (!$v)
+		{
+			$v = $this->application->getUserInput($message, $type, $values, $required);
+
+			$this->state->set($vName, $v);
+		}
+
+		return $v;
+	}
+
 	/**
 	 * @return AcliModelDeploy
 	 * @throws Exception
@@ -74,77 +191,46 @@ class AcliModelDeploy extends JModelBase
 		if (!array_key_exists($targetApplication, $applicationList))
 			throw new Exception(sprintf('Unknown application: %s', $targetApplication));
 
-		//-- Version
-		$version = $this->state->get('version');
-
-		if (!$version)
-		{
-			$version = $this->application->getUserInput('Select a version'
-				, 'mchoice', array_keys($applicationList[$targetApplication]->versions));
-
-			$this->state->set('version', $version);
-		}
+		$version = $this->getUserInput('version', sprintf('Select a %s version', $targetApplication)
+			, 'mchoice', array_keys($applicationList[$targetApplication]->versions));
 
 		if (!array_key_exists($version, $applicationList[$targetApplication]->versions))
 			throw new Exception('Invalid version', 1);
 
-//		$updaterepo = $this->application->input->get('updaterepo');
-
 		if ('development' == $version)
 		{
 			if ('0' === $this->application->getUserInput('Update the repository ?', 'yesno', array(), false))
-			{
 				$this->application->input->set('updaterepo', 1);
-//				$this->state->set('updaterepo', 1);
-			}
 		}
 
-		//-- http root
-		$root = $this->state->get('httpRoot');
-
-		if (!$root)
-		{
-			$root = $this->application->getUserInput('The http root directory:');
-
-			$this->state->set('httpRoot', $root);
-		}
-
-		if (!JFolder::exists($root))
-			throw new Exception('Invalid httpRoot path', 1);
+		$root = $this->checkRootPath();
 
 		//-- Target
-		$target = $this->application->input->get('target');
-
-		if (!$target)
-			$target = $this->application->getUserInput('The name of the target directory:');
-
-		$this->state->set('target', $target);
-
+		$target = $this->getUserInput('target', 'The name of the target directory');
 
 		$targetDir = $root . '/' . $target;
 
 		if (JFolder::exists($targetDir))
 			throw new Exception('The target directory must not exist', 1);
 
-		$sourceDir = PATH_REPOSITORIES . '/' . $targetApplication . '/' . $version;
-
-		$this->state->set('sourceDir', $sourceDir);
 		$this->state->set('targetDir', $targetDir);
-
-		$message = array();
-
-		$message[] = sprintf('Application:      %s', $targetApplication);
-		$message[] = sprintf('Version:          %s', $version);
-		$message[] = sprintf('Source directory: %s', $sourceDir);
-		$message[] = sprintf('Target directory: %s', $targetDir);
-
-		$this->application->displayMessage(implode("\n", $message));
 
 		$className = 'AcliApplicationInterface' . ucfirst($targetApplication);
 
 		$this->interface = new $className($this->state);
 
-		$this->interface->checkSourceDirectory($applicationList[$targetApplication]->versions[$version]);
+		$sourceDir = $this->interface->checkSourceDirectory($targetApplication, $applicationList[$targetApplication]->versions[$version]);
+		$this->state->set('sourceDir', $sourceDir);
+
+		$message = array();
+
+		$message[] = 'Ready to install:';
+		$message[] = sprintf('Application:      %s', $targetApplication);
+		$message[] = sprintf('Version:          %s', $version);
+		$message[] = sprintf('Source directory: %s', $sourceDir);
+		$message[] = sprintf('Target directory: %s', $targetDir);
+
+		$this->application->displayMessage($message);
 
 		return $this;
 	}
@@ -204,6 +290,11 @@ class AcliModelDeploy extends JModelBase
 		return $this;
 	}
 
+	/**
+	 * Display the result.
+	 *
+	 * @return AcliModelDeploy
+	 */
 	private function displayResult()
 	{
 		$this->application->displayMessage($this->interface->getResultMessage());

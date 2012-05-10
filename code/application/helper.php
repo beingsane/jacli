@@ -7,6 +7,15 @@
 
 class AcliApplicationHelper
 {
+	/**
+	 * Fetch the configuration data.
+	 *
+	 * @param $targetApplication
+	 *
+	 * @return JConfig
+	 *
+	 * @throws RuntimeException
+	 */
 	public static function fetchConfigurationData($targetApplication)
 	{
 		// Ensure that required path constants are defined.
@@ -65,6 +74,11 @@ class AcliApplicationHelper
 		return $config;
 	}
 
+	/**
+	 * Get overrides from user input.
+	 *
+	 * @param JRegistry $config
+	 */
 	public static function getOverrides(JRegistry $config)
 	{
 		$cfg = $config->toObject();
@@ -91,7 +105,7 @@ class AcliApplicationHelper
 			}
 			else
 			{
-				$test = $input->get($k);
+				$test = $input->get($k, false, 'var');
 
 				if ($test)
 				{
@@ -153,6 +167,15 @@ class AcliApplicationHelper
 		return $applicationList;
 	}
 
+	/**
+	 * Parse the application configuration.
+	 *
+	 * @param $app
+	 *
+	 * @return string
+	 *
+	 * @throws Exception
+	 */
 	public static function parseAppConfig($app)
 	{
 		$path = JPATH_CONFIGURATION . '/application/' . $app . '.dist.php';
@@ -191,9 +214,6 @@ class AcliApplicationHelper
 		$html[] = '</ul>';
 
 		return implode("\n", $html);
-
-
-		$xml = JFactory::getXML($path);
 	}
 
 }

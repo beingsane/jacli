@@ -56,7 +56,7 @@ class AcliUserinterfaceKde extends AcliUserinterface
 	/**
 	 * Display an error message.
 	 *
-	 * @param string $message
+	 * @param mixed $message array or string
 	 * @param string $type
 	 *
 	 * @throws UnexpectedValueException
@@ -64,7 +64,7 @@ class AcliUserinterfaceKde extends AcliUserinterface
 	 */
 	public function displayMessage($message, $type = 'message')
 	{
-		$kType = '';
+		$message =  implode("\n", (array) $message);
 
 		switch($type)
 		{
@@ -84,6 +84,7 @@ class AcliUserinterfaceKde extends AcliUserinterface
 				throw new UnexpectedValueException(__METHOD__ . ' - Invalid message type');
 		}
 
+		// Display the message
 		shell_exec('kdialog --'.$kType.' "' . $message . '"');
 
 		return $this;

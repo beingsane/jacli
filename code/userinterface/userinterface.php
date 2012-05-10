@@ -34,7 +34,7 @@ abstract class AcliUserinterface
 	/**
 	 * Display an error message.
 	 *
-	 * @param string $message
+	 * @param mixed $message array or string
 	 * @param string $type
 	 *
 	 * @throws UnexpectedValueException

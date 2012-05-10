@@ -25,6 +25,13 @@ class AcliModelDatabase extends JModelBase
 
 	//private $dbDriver = null;
 
+	/**
+	 * Constructor.
+	 *
+	 * @param JRegistry $options
+	 *
+	 * @throws Exception
+	 */
 	public function __construct(JRegistry $options)
 	{
 		$this->connection = mysql_connect($options->get('db_host'), $options->get('db_user'), $options->get('db_pass'));
@@ -37,13 +44,21 @@ class AcliModelDatabase extends JModelBase
 		*/
 
 		if (!$this->connection)
-			throw new Exception('Could not connect: ' . mysql_error(), 1);
+			throw new Exception(__METHOD__.' - Could not connect: ' . mysql_error(), 1);
 
 		$this->tablePrefix = $options->get('db_prefix');
 
 		$this->options = $options;
 	}
 
+	/**
+	 * Create the database
+	 *
+	 * @return AcliModelDatabase
+	 *
+	 * @throws UnexpectedValueException
+	 * @throws Exception
+	 */
 	public function createDB()
 	{
 		$dbName = $this->options->get('db_name');
@@ -71,6 +86,57 @@ class AcliModelDatabase extends JModelBase
 		return $this;
 	}
 
+	/**
+	 * Delete a database.
+	 *
+	 * @param $dbName
+	 *
+	 * @return AcliModelDatabase
+	 *
+	 * @throws UnexpectedValueException
+	 * @throws Exception
+	 */
+	public function deleteDb($dbName)
+	{
+		if (!$dbName)
+			throw new UnexpectedValueException(__METHOD__ . ' - Empty database name', 1);
+
+		$res = mysql_query('SHOW DATABASES');
+
+		$found = false;
+
+		while ($row = mysql_fetch_object($res))
+		{
+			if ($dbName == $row->Database)
+			{
+				$found = true;
+
+				break;
+			}
+		}
+
+		if (!$found)
+			throw new UnexpectedValueException(__METHOD__ . ' - The database ' . $dbName . ' does not exist', 1);
+
+		if (!mysql_query('DROP DATABASE ' . $dbName, $this->connection))
+		{
+			mysql_close($this->connection);
+
+			throw new Exception(__METHOD__ . ' - Error deleting database: ' . mysql_error(), 1);
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Select the database.
+	 *
+	 * @param $dbName
+	 *
+	 * @return AcliModelDatabase
+	 *
+	 * @throws Exception
+	 */
 	public function selectDb($dbName)
 	{
 		$db_selected = mysql_select_db($dbName, $this->connection);
@@ -159,6 +225,10 @@ class AcliModelDatabase extends JModelBase
 		return $this;
 	}
 
+	/**
+	 * @param $text
+	 * @return string
+	 */
 	public function quote($text)
 	{
 		$result = mysql_real_escape_string($text, $this->connection);

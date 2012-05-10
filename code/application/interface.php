@@ -39,22 +39,29 @@ abstract class AcliApplicationInterface
 	abstract public function getBrowserLinks();
 
 	/**
+	 * @param string           $targetApplication
 	 * @param SimpleXMLElement $version
-	 * @return AcliApplicationInterface
+	 *
 	 * @throws Exception
+	 * @return AcliApplicationInterface
 	 */
-	public function checkSourceDirectory(SimpleXMLElement $version)
+	public function checkSourceDirectory($targetApplication, SimpleXMLElement $version)
 	{
+		$sourceDir = PATH_REPOSITORIES . '/' . $targetApplication . '/' . $version->version;
+
 		$downloader = new AcliModelDownloader($this->config);
-		$sourceDir = $this->config->get('sourceDir');
+//		$sourceDir = $this->config->get('sourceDir');
 
 		switch ($version->type)
 		{
 			case 'download';
 				if (!JFolder::exists($sourceDir))
-				{
 					$downloader->download($sourceDir, $version);
-				}
+
+			//	$subDir = (string) $version->subfolder;
+
+				if ($version->subfolder)
+					$sourceDir .= '/' . $version->subfolder;
 
 				break;
 
@@ -65,7 +72,8 @@ abstract class AcliApplicationInterface
 
 			case 'svn':
 				$downloader->checkoutSVN($sourceDir, $version);
-				$this->config->set('sourceDir', $sourceDir . '/export');
+
+				$sourceDir .= '/export';
 
 				break;
 
@@ -74,12 +82,12 @@ abstract class AcliApplicationInterface
 					, __METHOD__, $version->type), 1);
 		}
 
-		return $this;
+		return $sourceDir;
 	}
 
 	/**
 	 * @param string $string
-	 * @param bool $nl
+	 * @param bool   $nl
 	 *
 	 * @return \AcliApplicationInterface
 	 */

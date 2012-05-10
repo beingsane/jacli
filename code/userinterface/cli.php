@@ -81,7 +81,7 @@ class AcliUserinterfaceCli extends AcliUserinterface
 	/**
 	 * Display an error message.
 	 *
-	 * @param string $message
+	 * @param mixed $message array or string
 	 * @param string $type
 	 *
 	 * @throws UnexpectedValueException
@@ -90,26 +90,31 @@ class AcliUserinterfaceCli extends AcliUserinterface
 	 */
 	public function displayMessage($message, $type = 'message')
 	{
+		$nl = "\n";
+
+		$message = implode($nl, (array) $message);
+
 		switch($type)
 		{
 			case 'message':
-				$message = "\n".str_repeat('=', 60)."\n"
+				$message = $nl.str_repeat('=', 60).$nl
 				.$message
-				.str_repeat('=', 60)."\n";
+				.$nl.str_repeat('=', 60).$nl;
 				break;
 
 			case 'warning':
-				$message = '**** WARNING: '.$message;
+				$message = '**** WARNING: ' . $message;
 				break;
 
 			case 'error':
-				$message = '**** ERROR: '.$message;
+				$message = '**** ERROR: ' . $message;
 				break;
 
 			default:
 				throw new UnexpectedValueException(__METHOD__ . ' - Invalid message type');
 		}
 
+		// Display the message
 		$this->application->out($message);
 
 		return $this;
