@@ -1,0 +1,18 @@
+<repository>
+    <name>Drupal</name>
+    <versions>
+        <version>
+            <version>7.14</version>
+            <type>download</type>
+            <subfolder>drupal-7.14</subfolder>
+            <url>http://ftp.drupal.org/files/projects/drupal-7.14.zip</url>
+            <changelog></changelog>
+        </version>
+        <version>
+            <version>development</version>
+            <type>git</type>
+            <url>http://git.drupal.org/project/drupal.git</url>
+            <changelog></changelog>
+        </version>
+    </versions>
+</repository>
