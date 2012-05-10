@@ -1,39 +1,48 @@
 # JACLI
 
 ## Abstract
-JACLI is a PHP application based on the Joomla! Platform.
+JACLI is a PHP application based on the Joomla! Platform. It can be used to install other PHP applications.
 
-It is used to install other PHP applications.
+Currently supported applications (in alphabetical order ```;)```):
 
-## Concrete
-Currently supported applications:
-
-* The [Joomla! CMS](http://joomla.org)
 * [Dokuwiki](http://dokuwiki.org)
+  2012-01-25a and development (git)
+* [Drupal](http://drupal.org) (almost ```*```)
+  7.14 and development (git)
+* [Joomla! CMS](http://joomla.org)
+  2.5.4 and development (git)
+* [Wordpress](http://wordpress.org) (almost ```*```)
+  3.3.2 anddevelopment (svn)
 * ...
+
+The sources are **not** provided and can be downloaded automatically or copied manually to a given directory.
 
 ## Usage
 Open a terminal window and type:
 
-```jacli -h```
+```jacli --help```
 
 Supported interfaces:
 
-* CLI
+* CLI - The default interface - should work on all operating systems
+* KDE, Gnome - Message boxes
+
+Frontends:
+
 * Web (WIP)
-* KDE (even more WIP)
+* Ruby/QT, Python/QT, C++/QT (very WIP)
 
 ## Requirements
 * A Joomla! Platform version min 12.1 (@todo to be released)
 	An enviroment variable ```JOOMLA_PLATFORM_PATH``` set up.
 * The required sources for the applications to build can be downloaded or copied into the source directory
-	```wget``` to download package files
-	```git``` or ```svn``` to checkout from version control systems
+	```wget``` (optional) to download package files
+	```git``` or ```svn``` (optional) to checkout from version control systems
 
 ## Supported Operating Systems
-* Developed and tested on [OpenSuSE Linux](http://opensuse.org)
+* Developed and tested only on [OpenSuSE Linux](http://opensuse.org)
 	So it should probably work on most Unixoide systems
-* ...
+* ... **WANTED**: Developers ...
 
 If **you** find your operating system unsupported, please use the facilities here on GitHub to send me a pull request with the corresponding code changes.
 
@@ -48,3 +57,6 @@ Last but not least: Meet [the World Champion Jack Lee](http://www.youtube.com/wa
 
 have Fun,
 <tt>=;)</tt>
+
+<hr />
+* ```*``` - means that the application will be copied to the workspace and the database will be set up. Then you have to run the applications install routine.
