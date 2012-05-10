@@ -18,7 +18,7 @@ class AcliConfigDokuwiki extends JConfig
 	public $admin_password = 'test';
 	public $admin_email = 'demo@example.com';
 
-	public $httpBase = 'http://joomla.tests';
+	public $httpBase = 'http://localhost';
 
 	public $patchDir = '';
 

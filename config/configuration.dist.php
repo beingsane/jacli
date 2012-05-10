@@ -6,6 +6,13 @@
  */
 class JConfig
 {
+	// Database credentials
+	public $db_type = 'mysqli';
+	public $db_host = 'localhost';
+	public $db_user = 'root';
+	public $db_pass = '';
+	public $db_prefix = '';
+
 	/**
 	 * The default application to build (e.g. joomlacms).
 	 *
@@ -36,6 +43,15 @@ class JConfig
 	// C:\path\to\your\workspace
 	public $httpRoot = '';
 
+	/**
+	 * Web path to your workspace
+	 *
+	 * http://localhost
+	 *
+	 * @var string
+	 */
+	public $httpBase = '';
+
 	// C:\path\to\browser.exe
 	public $browserBin = '';
 
@@ -46,7 +62,7 @@ class JConfig
 	 *
 	 * @var string
 	 */
-	public $gitBin = 'git';
+	public $gitBin = '';
 
 	/**
 	 * The interface to use.
@@ -57,16 +73,7 @@ class JConfig
 	 *
 	 * @var string
 	 */
-	public $interface = '';
-
-	/**
-	 * Web path to your workspace
-	 *
-	 * http://localhost
-	 *
-	 * @var string
-	 */
-	public $httpBase = '';
+	public $interface = 'cli';
 
 	public $patchDir = '';
 
