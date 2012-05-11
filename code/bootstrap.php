@@ -34,11 +34,9 @@ if (!defined('JPATH_PLATFORM'))
 }
 
 // Ensure that required path constants are defined.
-if (!defined('JPATH_BASE'))
-{
-	define('JPATH_BASE', realpath(__DIR__));
-	define('JPATH_ROOT', JPATH_BASE);
-}
+defined('JPATH_BASE')      || define('JPATH_BASE', realpath(__DIR__));
+defined('JPATH_ROOT')      || define('JPATH_ROOT', JPATH_BASE);
+defined('JACLI_PATH_DATA') || define('JACLI_PATH_DATA', realpath(JPATH_ROOT . '/../data'));
 
 // Import the platform(s).
 require_once JPATH_PLATFORM . '/import.php';

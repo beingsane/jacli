@@ -26,6 +26,8 @@ class AcliModelDeploy extends JModelBase
 		parent::__construct($state);
 
 		$this->application = JFactory::getApplication();
+
+		$this->setupLog();
 	}
 
 	/**
@@ -59,36 +61,6 @@ class AcliModelDeploy extends JModelBase
 		$this->application->out(print_r($targets, 1));
 	}
 
-	/**
-	 * Get a list of installed applications.
-	 *
-	 * @return AcliModelDeploy
-	 */
-	public function listApplications()
-	{
-		$list = AcliApplicationHelper::getApplicationList();
-
-		$message = array();
-
-		$message[] = 'Installed Applications';
-		$message[] = '';
-
-		foreach ($list as $app)
-		{
-			$message[] = $app->name;
-
-			foreach ($app->versions as $version)
-			{
-				$message[] = '  ' . $version->version . ' (' . $version->type . ')';
-			}
-		}
-
-		$message[] = '';
-
-		$this->application->displayMessage($message);
-
-		return $this;
-	}
 
 	public function deleteTarget()
 	{
@@ -100,7 +72,7 @@ class AcliModelDeploy extends JModelBase
 
 		$targetDir = $root . '/' . $target;
 
-		if ( ! JFolder::exists($targetDir))
+		if (!JFolder::exists($targetDir))
 			throw new Exception('The target directory does not exist', 1);
 
 		$model = new AcliModelDatabase($this->state);
@@ -112,7 +84,7 @@ class AcliModelDeploy extends JModelBase
 			$this->application->out('Deleting the database');
 			$model->deleteDb($target);
 		}
-		catch(UnexpectedValueException $e)
+		catch (UnexpectedValueException $e)
 		{
 			$this->application->out('A database has not been found !');
 			//throw new Exception($e);
@@ -120,7 +92,7 @@ class AcliModelDeploy extends JModelBase
 
 		$this->application->out(sprintf('Deleting the folder: %s', $targetDir));
 
-		if( ! JFolder::delete($targetDir))
+		if (!JFolder::delete($targetDir))
 			throw new Exception(JError::getError());
 
 		$this->application->out('The target has been deleted');
@@ -143,11 +115,11 @@ class AcliModelDeploy extends JModelBase
 	/**
 	 * Get input from the user.
 	 *
-	 * @param $vName
-	 * @param $message
+	 * @param        $vName
+	 * @param        $message
 	 * @param string $type
-	 * @param array $values
-	 * @param bool $required
+	 * @param array  $values
+	 * @param bool   $required
 	 *
 	 * @return mixed|string
 	 */
@@ -231,6 +203,8 @@ class AcliModelDeploy extends JModelBase
 		$message[] = sprintf('Target directory: %s', $targetDir);
 
 		$this->application->displayMessage($message);
+
+		JLog::add(implode("\n", $message));
 
 		return $this;
 	}
@@ -389,6 +363,49 @@ class AcliModelDeploy extends JModelBase
 	{
 		$this->application->out($text, $nl);
 
+		JLog::add($text);
+
 		return $this;
 	}
+
+	/**
+	 * Set up the log file.
+	 *
+	 * @return \AcliModelDeploy
+	 */
+	private function setupLog()
+	{
+		jimport('joomla.filesystem.file');
+
+		$fileName = 'log.php';
+		$entry = '';
+
+		if ('preserve' == JFactory::getApplication()->input->get('logMode')
+			&& JFile::exists(JACLI_PATH_DATA . '/' . $fileName)
+		)
+		{
+			$entry = '----------------------------------------------';
+		}
+		elseif (JFile::exists(JACLI_PATH_DATA . '/' . $fileName))
+		{
+			JFile::delete(JACLI_PATH_DATA . '/' . $fileName);
+		}
+
+		JLog::addLogger(
+			array(
+				'text_file_path' => JACLI_PATH_DATA
+			, 'text_file' => $fileName
+			, 'text_entry_format' => '{DATETIME}	{PRIORITY}	{MESSAGE}'
+			, 'text_file_no_php' => true
+			)
+			, JLog::INFO | JLog::ERROR
+		);
+
+		if ('' != $entry)
+			JLog::add($entry);
+
+		return $this;
+	}
+
+
 }

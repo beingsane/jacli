@@ -178,17 +178,25 @@ class AcliApplicationHelper
 	 */
 	public static function parseAppConfig($app)
 	{
-		$path = JPATH_CONFIGURATION . '/application/' . $app . '.dist.php';
+		$path = JPATH_CONFIGURATION . '/application/' . $app;
 
-		if( ! file_exists($path))
-			throw new Exception(__METHOD__.' - File not found: ' . $path);
-
-		require $path;
+		if (file_exists($path . '.php'))
+		{
+			require $path . '.php';
+		}
+		elseif (file_exists($path . '.dist.php'))
+		{
+			require $path . '.dist.php';
+		}
+		else
+		{
+			throw new Exception(__METHOD__ . ' - No configuration file found in: ' . $path);
+		}
 
 		$className = 'AcliConfig' . ucfirst($app);
 
 		if (!class_exists($className))
-		throw new Exception(__METHOD__ . 'Config class not found: ' . $className);
+			throw new Exception(__METHOD__ . 'Config class not found: ' . $className);
 
 		$cfg = new $className;
 
@@ -202,7 +210,7 @@ class AcliApplicationHelper
 
 		foreach ($cfg as $k => $v)
 		{
-			if(in_array($k, $blacks))
+			if (in_array($k, $blacks))
 				continue;
 
 			$html[] = '<li>';
