@@ -33,7 +33,9 @@ AcliApplicationCli extends JApplicationCli
 
 		AcliApplicationHelper::getOverrides($this->config);
 
-		if ($this->input->get('h', $this->input->get('help')))
+		if ($this->input->get('h', $this->input->get('help'))
+			|| empty($this->input->args[0])
+		)
 		{
 			$this->help();
 
@@ -46,26 +48,11 @@ AcliApplicationCli extends JApplicationCli
 
 		try
 		{
-			$model = new AcliModelDeploy($this->config);
+			// Get the controller instance based on the request.
+			$controller = $this->fetchController();
 
-			if($this->input->get('listtargets'))
-			{
-				$model->listTargets();
-			}
-			elseif($this->input->get('deletetarget'))
-			{
-				$model->deleteTarget();
-			}
-			elseif($this->input->get('listapps'))
-			{
-				$model->listApplications();
-			}
-			else
-			{
-				$model->deploy();
-
-			}
-
+			// Execute the controller.
+			$controller->execute();
 		}
 		catch (Exception $e)
 		{
@@ -98,20 +85,27 @@ AcliApplicationCli extends JApplicationCli
 	{
 		$cfg = $this->config->toObject();
 
-		$this->out('Usage:    jacli.php [switches]');
 		$this->out();
+		$this->out('========================================');
+		$this->out('Usage:    jacli <command> [switches]');
+		$this->out('========================================');
+		$this->out();
+		$this->out('Commands');
+		$this->out('========');
+		$this->out('  install       Install an application.');
+		$this->out('  listapps      Lists all known applications.');
+		$this->out('  listtargets   Lists all targets under the given httpRoot.');
+		$this->out('  deletetarget  <target>  Deletes a target.');
+		$this->out();
+		$this->out('Switches');
+		$this->out('========');
 		$this->out('  -h  --help   Prints this usage information.');
 		$this->out('  -q  --quiet  Do not produce any output (except errors).');
 		$this->out();
-		$this->out('  --install  Install an application - This is the default action.');
-		$this->out('  --listtargets  Lists all targets under the given httpRoot.');
-		$this->out('  --deletetarget <target>  Deletes a target.');
-		$this->out('  --listapps  Lists all known applications.');
-		$this->out();
-		$this->out('Required:');
 		$this->out('  --target  Specify a target directory.');
 		$this->out();
-		$this->out('Overrideable:');
+		$this->out('Overrideable');
+		$this->out('============');
 
 		foreach ($cfg as $k => $v)
 		{
@@ -143,17 +137,19 @@ AcliApplicationCli extends JApplicationCli
 		}
 
 		$this->out();
-		$this->out('Optional:');
+		$this->out('Optional');
+		$this->out('========');
 		$this->out('  --updaterepo  Update the repository (if applicable)');
 
 		$this->out();
 		$this->out(str_repeat('_', 80));
-		$this->out('Examples:');
+		$this->out('Examples');
+		$this->out('========');
 		$this->out();
-		$this->out('jacli --target test1');
+		$this->out('jacli install --target test1');
 		$this->out('  Deploys an application to the target \'test1\' according to the options specified in the configuration.');
 		$this->out();
-		$this->out('jacli --target test1 --version git --updaterepo');
+		$this->out('jacli install --target test1 --version git --updaterepo');
 		$this->out('  Deploys the version \'git\' of an application, updating the sources first.');
 
 		return $this;
@@ -163,7 +159,8 @@ AcliApplicationCli extends JApplicationCli
 	 * Write a string to standard output.
 	 *
 	 * @param string $text
-	 * @param bool $nl
+	 * @param bool   $nl
+	 *
 	 * @return AcliApplicationCli|JApplicationCli
 	 */
 	public function out($text = '', $nl = true)
@@ -173,10 +170,12 @@ AcliApplicationCli extends JApplicationCli
 
 	/**
 	 * Get a value from the user using the given user interface.
-	 * @param $message
+	 *
+	 * @param        $message
 	 * @param string $type
-	 * @param array $values
-	 * @param bool $required
+	 * @param array  $values
+	 * @param bool   $required
+	 *
 	 * @return mixed|string
 	 * @throws Exception
 	 */
@@ -195,8 +194,9 @@ AcliApplicationCli extends JApplicationCli
 	/**
 	 * Displays a message using the given user interface.
 	 *
-	 * @param mixed $message array or string
+	 * @param mixed  $message array or string
 	 * @param string $type
+	 *
 	 * @return AcliApplicationCli
 	 */
 	public function displayMessage($message, $type = 'message')
@@ -205,4 +205,38 @@ AcliApplicationCli extends JApplicationCli
 
 		return $this;
 	}
+
+	/**
+	 * Method to get a controller object based on the command line input.
+	 *
+	 * @return  JController
+	 *
+	 * @since   1.0
+	 * @throws  InvalidArgumentException
+	 */
+	protected function fetchController()
+	{
+		$base = 'AcliController';
+
+		$sub = $this->input->args[0];
+
+		$className = $base . ucfirst($sub);
+
+		// If the requested controller exists let's use it.
+		if (class_exists($className))
+		{
+			//$input = new JInput;
+
+			return new $className($this->input, $this);
+		}
+
+		// Nothing found. Panic.
+		throw new InvalidArgumentException('Unable to handle the request for route: ' . $this->input->args[0], 400);
+	}
+
+	public function getConfig()
+	{
+		return $this->config->toObject();
+	}
+
 }
