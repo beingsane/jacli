@@ -20,14 +20,11 @@ class AcliConfigJoomlacms extends JConfig
 	public $admin_email = 'demo@example.com';
 
 	// http://localhost
-	public $httpBase = 'http://joomla.tests';
+	public $httpBase = 'http://localhost';
 
-	public $patchDir = '/home/elkuku/stormspace/jacli/patches';
+	public $patchDir = '';
 
 	public $patches = array(
-		'joomla-1.6--1/admin_autologin.patch',
-		// 'error_reporting_-1',
+		// 'patchfile',
 	);
-
-
 }

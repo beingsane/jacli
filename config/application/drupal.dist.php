@@ -15,12 +15,12 @@ class AcliConfigDrupal extends JConfig
 	public $db_prefix = 'drupal_';
 
 	// Admin user credentials
-	public $admin_user = 'admin';
-	public $admin_password = 'test';
-	public $admin_email = 'demo@example.com';
+	//public $admin_user = 'admin';
+	//public $admin_password = 'test';
+	//public $admin_email = 'demo@example.com';
 
 	// http://localhost
-	public $httpBase = 'http://joomla.tests';
+	public $httpBase = 'http://localhost';
 
 	public $patchDir = '';
 
