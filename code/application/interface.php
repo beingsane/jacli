@@ -4,7 +4,7 @@
  * Date: 05.05.12
  * Time: 00:07
  */
-abstract class AcliApplicationInterface
+abstract class JacliApplicationInterface
 {
 	/**
 	 * @var JRegistry
@@ -21,7 +21,7 @@ abstract class AcliApplicationInterface
 		$this->config = $config;
 	}
 
-	abstract public function createAdminUser(AcliModelDatabase $db);
+	abstract public function createAdminUser(JacliModelDatabase $db);
 
 	abstract public function createConfig();
 
@@ -32,7 +32,7 @@ abstract class AcliApplicationInterface
 	/**
 	 * Displays a result message.
 	 *
-	 * @return AcliApplicationInterface
+	 * @return JacliApplicationInterface
 	 */
 	abstract public function getResultMessage();
 
@@ -43,13 +43,13 @@ abstract class AcliApplicationInterface
 	 * @param SimpleXMLElement $version
 	 *
 	 * @throws Exception
-	 * @return AcliApplicationInterface
+	 * @return JacliApplicationInterface
 	 */
 	public function checkSourceDirectory($targetApplication, SimpleXMLElement $version)
 	{
 		$sourceDir = PATH_REPOSITORIES . '/' . $targetApplication . '/' . $version->version;
 
-		$downloader = new AcliModelDownloader($this->config);
+		$downloader = new JacliModelDownloader($this->config);
 //		$sourceDir = $this->config->get('sourceDir');
 
 		switch ($version->type)
@@ -89,7 +89,7 @@ abstract class AcliApplicationInterface
 	 * @param string $string
 	 * @param bool   $nl
 	 *
-	 * @return \AcliApplicationInterface
+	 * @return \JacliApplicationInterface
 	 */
 	protected function out($string = '', $nl = true)
 	{

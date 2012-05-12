@@ -5,7 +5,7 @@
  * Time: 01:01
  */
 
-class AcliModelDownloader extends JModelBase
+class JacliModelDownloader extends JModelBase
 {
 	/**
 	 * Check out from a git repository.
@@ -15,7 +15,7 @@ class AcliModelDownloader extends JModelBase
 	 *
 	 * @throws Exception
 	 *
-	 * @return \AcliModelDeploy
+	 * @return \JacliModelDeploy
 	 */
 	public function checkoutGit($dir, SimpleXMLElement $version)
 	{
@@ -66,7 +66,7 @@ class AcliModelDownloader extends JModelBase
 	 * @param SimpleXMLElement $version
 	 *
 	 * @throws Exception
-	 * @return \AcliModelDownloader
+	 * @return \JacliModelDownloader
 	 */
 	public function checkoutSVN($dir, SimpleXMLElement $version)
 	{
@@ -115,7 +115,7 @@ class AcliModelDownloader extends JModelBase
 	 * @param                  $dir
 	 * @param SimpleXMLElement $version
 	 *
-	 * @return AcliModelDownloader
+	 * @return JacliModelDownloader
 	 * @throws Exception
 	 */
 	public function download($dir, SimpleXMLElement $version)

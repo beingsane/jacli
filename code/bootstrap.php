@@ -45,10 +45,38 @@ require_once JPATH_PLATFORM . '/import.php';
 if (!class_exists('JLoader'))
 	throw new Exception('Joomla Platform not loaded.', 1);
 
-// Setup the autoloader for the JaCLI application classes.
-JLoader::registerPrefix( /*J*/'Acli', __DIR__);
-
-define('COLORS', class_exists('Console_Color'));
-
 //@todo deprecate jimports
 jimport('joomla.filesystem.folder');
+
+//-- php >= 5.3 !
+spl_autoload_register('jacliLoader', true, true);
+
+/**
+ * Autoloader.
+ *
+ * This function was created, because we LOVE Joomla!
+ * ..and also want a class prefix beginning with J =;)
+ *
+ * @param string $className
+ *
+ * @return mixed
+ */
+function jacliLoader($className)
+{
+	if(0 !== strpos($className, 'Jacli'))
+		return true;
+
+	$parts = preg_split('/(?<=[a-z])(?=[A-Z])/x', substr($className, 5));
+
+	// If there is only one part we want to duplicate that part for generating the path.
+	$parts = (1 === count($parts))
+		? array($parts[0], $parts[0])
+		: $parts;
+
+	$path = JPATH_BASE.'/'.strtolower(implode('/', $parts)).'.php';
+
+	if(file_exists($path))
+		return include $path;
+
+	return true;
+}

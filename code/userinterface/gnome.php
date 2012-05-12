@@ -8,7 +8,7 @@
 /**
  * A Gnome interface.
  */
-class AcliUserinterfaceGnome extends AcliUserinterface
+class JacliUserinterfaceGnome extends JacliUserinterface
 {
 	/**
 	 * Get a value from the user.
@@ -55,7 +55,7 @@ class AcliUserinterfaceGnome extends AcliUserinterface
 	 * @param string $type
 	 *
 	 * @throws UnexpectedValueException
-	 * @return AcliUserinterface
+	 * @return JacliUserinterface
 	 */
 	public function displayMessage($message, $type = 'message')
 	{

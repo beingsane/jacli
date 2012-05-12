@@ -5,9 +5,9 @@
  * Time: 21:58
  */
 
-class AcliApplicationInterfaceWordpress extends AcliApplicationInterface
+class JacliApplicationInterfaceWordpress extends JacliApplicationInterface
 {
-	public function createAdminUser(AcliModelDatabase $db)
+	public function createAdminUser(JacliModelDatabase $db)
 	{
 		// TODO: Implement createAdminUser() method.
 	}
@@ -34,7 +34,7 @@ class AcliApplicationInterfaceWordpress extends AcliApplicationInterface
 		$this->config->set('site_name', 'TEST ' . $this->config->get('target'));
 		$this->config->set('db_name', $this->config->get('target'));
 
-		$dbModel = new AcliModelDatabase($this->config);
+		$dbModel = new JacliModelDatabase($this->config);
 
 		$this->out(sprintf('Creating database %s ...', $this->config->get('db_name')), false);
 		$dbModel->createDB();

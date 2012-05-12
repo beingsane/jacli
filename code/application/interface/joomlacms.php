@@ -4,18 +4,18 @@
  * Date: 04.05.12
  * Time: 19:55
  */
-class AcliApplicationInterfaceJoomlacms extends AcliApplicationInterface
+class JacliApplicationInterfaceJoomlacms extends JacliApplicationInterface
 {
 	protected $name = 'joomla-cms';
 
 	/**
 	 * Create the admin user.
 	 *
-	 * @param AcliModelDatabase $db
+	 * @param JacliModelDatabase $db
 	 *
-	 * @return AcliApplicationInterfaceJoomlacms
+	 * @return JacliApplicationInterfaceJoomlacms
 	 */
-	public function createAdminUser(AcliModelDatabase $db)
+	public function createAdminUser(JacliModelDatabase $db)
 	{
 		// TODO: Implement createAdminUser() method.
 		// Create random salt/password for the admin user
@@ -56,7 +56,7 @@ class AcliApplicationInterfaceJoomlacms extends AcliApplicationInterface
 	}
 
 	/**
-	 * @return \AcliApplicationInterfaceJoomlacms
+	 * @return \JacliApplicationInterfaceJoomlacms
 	 * @throws Exception
 	 */
 	public function createConfig()
@@ -267,7 +267,7 @@ class AcliApplicationInterfaceJoomlacms extends AcliApplicationInterface
 		$this->config->set('site_name', 'TEST ' . $this->config->get('target'));
 		$this->config->set('db_name', $this->config->get('target'));
 
-		$dbModel = new AcliModelDatabase($this->config);
+		$dbModel = new JacliModelDatabase($this->config);
 
 		$this->out(sprintf('Creating database %s ...', $this->config->get('db_name')), false);
 		$dbModel->createDB();

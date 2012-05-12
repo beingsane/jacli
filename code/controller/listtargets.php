@@ -4,7 +4,7 @@
 	 * Date: 11.05.12
 	 * Time: 11:36
 	 */
-class AcliControllerListtargets extends JControllerBase
+class JacliControllerListtargets extends JControllerBase
 {
 
 	/**
@@ -22,7 +22,7 @@ class AcliControllerListtargets extends JControllerBase
 	{
 		$state = new JRegistry(JFactory::getApplication()->getConfig());
 
-		$model = new AcliModelDeploy($state);
+		$model = new JacliModelDeploy($state);
 
 		$model->listTargets();
 	}

@@ -27,7 +27,7 @@ try
 	JLog::addLogger(array('logger' => 'echo'), JLog::ALL);
 
 	// Instantiate the application.
-	$application = JApplicationCli::getInstance('AcliApplicationCli');
+	$application = JApplicationCli::getInstance('JacliApplicationCli');
 
 	// Store the application.
 	JFactory::$application = $application;

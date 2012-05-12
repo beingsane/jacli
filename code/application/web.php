@@ -15,7 +15,7 @@
  *
  * @package  JACLI
  */
-class /*J*/AcliApplicationWeb extends JApplicationWeb
+class JacliApplicationWeb extends JApplicationWeb
 {
 	protected $lists = array();
 
@@ -38,7 +38,7 @@ class /*J*/AcliApplicationWeb extends JApplicationWeb
 		{
 			case 'getAppConfig':
 				$resp = new stdClass;
-				$resp->text = AcliApplicationHelper::parseAppConfig($this->input->get('app'));
+				$resp->text = JacliApplicationHelper::parseAppConfig($this->input->get('app'));
 				$resp->status = 0;
 
 
@@ -55,7 +55,7 @@ class /*J*/AcliApplicationWeb extends JApplicationWeb
 
 		$apps = array(array('items' => array('Select...')));
 
-		foreach (AcliApplicationHelper::getApplicationList() as $afile => $app)
+		foreach (JacliApplicationHelper::getApplicationList() as $afile => $app)
 		{
 			$vs = array();
 
@@ -139,7 +139,7 @@ class /*J*/AcliApplicationWeb extends JApplicationWeb
 	 */
 	protected function fetchConfigurationData($file = '', $class = 'JConfig')
 	{
-		return AcliApplicationHelper::fetchConfigurationData($this->input->get('application'));
+		return JacliApplicationHelper::fetchConfigurationData($this->input->get('application'));
 	}
 
 }

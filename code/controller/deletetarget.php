@@ -5,7 +5,7 @@
  * Time: 13:19
  */
 
-class AcliControllerDeletetarget extends JControllerBase
+class JacliControllerDeletetarget extends JControllerBase
 {
 
 	/**
@@ -23,7 +23,7 @@ class AcliControllerDeletetarget extends JControllerBase
 	{
 		$state = new JRegistry(JFactory::getApplication()->getConfig());
 
-		$model = new AcliModelDeploy($state);
+		$model = new JacliModelDeploy($state);
 
 		$model->deleteTarget();
 	}

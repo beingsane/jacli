@@ -5,7 +5,7 @@
  * Time: 05:05
  */
 
-class AcliApplicationHelper
+class JacliApplicationHelper
 {
 	/**
 	 * Fetch the configuration data.
@@ -65,7 +65,7 @@ class AcliApplicationHelper
 			{
 				require $file;
 
-				$className = 'AcliConfig' . $targetApplication;
+				$className = 'JacliConfig' . $targetApplication;
 
 				return new $className;
 			}
@@ -193,7 +193,7 @@ class AcliApplicationHelper
 			throw new Exception(__METHOD__ . ' - No configuration file found in: ' . $path);
 		}
 
-		$className = 'AcliConfig' . ucfirst($app);
+		$className = 'JacliConfig' . ucfirst($app);
 
 		if (!class_exists($className))
 			throw new Exception(__METHOD__ . 'Config class not found: ' . $className);

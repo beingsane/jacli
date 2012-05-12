@@ -5,9 +5,9 @@
  * Time: 19:55
  */
 
-class AcliApplicationInterfaceDokuwiki extends AcliApplicationInterface
+class JacliApplicationInterfaceDokuwiki extends JacliApplicationInterface
 {
-	public function createAdminUser(AcliModelDatabase $db)
+	public function createAdminUser(JacliModelDatabase $db)
 	{
 		return $this;
 	}

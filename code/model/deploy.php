@@ -4,15 +4,15 @@
  * Date: 03.05.12
  * Time: 16:21
  */
-class AcliModelDeploy extends JModelBase
+class JacliModelDeploy extends JModelBase
 {
 	/**
-	 * @var AcliApplicationCli
+	 * @var JacliApplicationCli
 	 */
 	private $application;
 
 	/**
-	 * @var AcliApplicationInterface
+	 * @var JacliApplicationInterface
 	 */
 	private $interface = null;
 
@@ -31,7 +31,7 @@ class AcliModelDeploy extends JModelBase
 	}
 
 	/**
-	 * @return AcliModelDeploy
+	 * @return JacliModelDeploy
 	 */
 	public function deploy()
 	{
@@ -75,7 +75,7 @@ class AcliModelDeploy extends JModelBase
 		if (!JFolder::exists($targetDir))
 			throw new Exception('The target directory does not exist', 1);
 
-		$model = new AcliModelDatabase($this->state);
+		$model = new JacliModelDatabase($this->state);
 
 		$this->application->out(sprintf('Deleting target: %s', $target));
 
@@ -138,12 +138,12 @@ class AcliModelDeploy extends JModelBase
 	}
 
 	/**
-	 * @return AcliModelDeploy
+	 * @return JacliModelDeploy
 	 * @throws Exception
 	 */
 	private function setup()
 	{
-		$applicationList = AcliApplicationHelper::getApplicationList();
+		$applicationList = JacliApplicationHelper::getApplicationList();
 
 		//-- Application
 		$targetApplication = $this->state->get('application');
@@ -154,9 +154,9 @@ class AcliModelDeploy extends JModelBase
 				, 'mchoice', array_keys($applicationList));
 
 			//-- Reload config
-			$cfg = new JRegistry(AcliApplicationHelper::fetchConfigurationData($targetApplication));
+			$cfg = new JRegistry(JacliApplicationHelper::fetchConfigurationData($targetApplication));
 
-			AcliApplicationHelper::getOverrides($cfg);
+			JacliApplicationHelper::getOverrides($cfg);
 			$this->state = $cfg;
 		}
 
@@ -187,7 +187,7 @@ class AcliModelDeploy extends JModelBase
 
 		$this->state->set('targetDir', $targetDir);
 
-		$className = 'AcliApplicationInterface' . ucfirst($targetApplication);
+		$className = 'JacliApplicationInterface' . ucfirst($targetApplication);
 
 		$this->interface = new $className($this->state);
 
@@ -210,7 +210,7 @@ class AcliModelDeploy extends JModelBase
 	}
 
 	/**
-	 * @return AcliModelDeploy
+	 * @return JacliModelDeploy
 	 * @throws Exception
 	 */
 	private function copyFiles()
@@ -229,7 +229,7 @@ class AcliModelDeploy extends JModelBase
 	}
 
 	/**
-	 * @return AcliModelDeploy
+	 * @return JacliModelDeploy
 	 * @throws Exception
 	 */
 	private function setupDatabase()
@@ -241,7 +241,7 @@ class AcliModelDeploy extends JModelBase
 
 	/**
 	 * Create configuration.php
-	 * @return \AcliModelDeploy
+	 * @return \JacliModelDeploy
 	 */
 	private function createConfig()
 	{
@@ -255,7 +255,7 @@ class AcliModelDeploy extends JModelBase
 	}
 
 	/**
-	 * @return AcliModelDeploy
+	 * @return JacliModelDeploy
 	 */
 	private function cleanup()
 	{
@@ -267,7 +267,7 @@ class AcliModelDeploy extends JModelBase
 	/**
 	 * Display the result.
 	 *
-	 * @return AcliModelDeploy
+	 * @return JacliModelDeploy
 	 */
 	private function displayResult()
 	{
@@ -279,7 +279,7 @@ class AcliModelDeploy extends JModelBase
 	/**
 	 * Applying patches.
 	 *
-	 * @return \AcliModelDeploy
+	 * @return \JacliModelDeploy
 	 */
 	private function applyPatches()
 	{
@@ -312,7 +312,7 @@ class AcliModelDeploy extends JModelBase
 	/**
 	 * Open in browser.
 	 *
-	 * @return \AcliModelDeploy
+	 * @return \JacliModelDeploy
 	 */
 	private function openInBrowser()
 	{
@@ -357,7 +357,7 @@ class AcliModelDeploy extends JModelBase
 	 * @param string $text
 	 * @param bool   $nl
 	 *
-	 * @return AcliModelDeploy
+	 * @return JacliModelDeploy
 	 */
 	private function out($text = '', $nl = true)
 	{
@@ -371,7 +371,7 @@ class AcliModelDeploy extends JModelBase
 	/**
 	 * Set up the log file.
 	 *
-	 * @return \AcliModelDeploy
+	 * @return \JacliModelDeploy
 	 */
 	private function setupLog()
 	{

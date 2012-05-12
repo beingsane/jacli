@@ -4,7 +4,7 @@
  * Date: 11.05.12
  * Time: 11:36
  */
-class AcliControllerInstall extends JControllerBase
+class JacliControllerInstall extends JControllerBase
 {
 
 	/**
@@ -22,7 +22,7 @@ class AcliControllerInstall extends JControllerBase
 	{
 		$state = new JRegistry(JFactory::getApplication()->getConfig());
 
-		$model = new AcliModelDeploy($state);
+		$model = new JacliModelDeploy($state);
 
 		$model->deploy();
 	}

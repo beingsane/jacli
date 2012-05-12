@@ -8,7 +8,7 @@
 /**
  * A CLI interface.
  */
-class AcliUserinterfaceCli extends AcliUserinterface
+class JacliUserinterfaceCli extends JacliUserinterface
 {
 	/**
 	 * Get a value from the user.
@@ -86,7 +86,7 @@ class AcliUserinterfaceCli extends AcliUserinterface
 	 *
 	 * @throws UnexpectedValueException
 	 *
-	 * @return AcliUserinterface
+	 * @return JacliUserinterface
 	 */
 	public function displayMessage($message, $type = 'message')
 	{

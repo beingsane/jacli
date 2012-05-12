@@ -4,7 +4,7 @@
 	 * Date: 11.05.12
 	 * Time: 11:36
 	 */
-class AcliControllerListapps extends JControllerBase
+class JacliControllerListapps extends JControllerBase
 {
 
 	/**
@@ -20,7 +20,7 @@ class AcliControllerListapps extends JControllerBase
 	 */
 	public function execute()
 	{
-		$model = new AcliModelTargetapp;
+		$model = new JacliModelTargetapp;
 
 		$model->listApplications();
 	}

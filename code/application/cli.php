@@ -16,12 +16,12 @@
  * http://www.youtube.com/watch?v=Z4CRwrR_lBE
  */
 class /*J*/
-AcliApplicationCli extends JApplicationCli
+JacliApplicationCli extends JApplicationCli
 {
 	private $verbose = true;
 
 	/**
-	 * @var AcliUserinterface
+	 * @var JacliUserinterface
 	 */
 	private $userInterface = null;
 
@@ -31,7 +31,7 @@ AcliApplicationCli extends JApplicationCli
 
 		$this->out('JACLI - A Joomla! CLI.');
 
-		AcliApplicationHelper::getOverrides($this->config);
+		JacliApplicationHelper::getOverrides($this->config);
 
 		if ($this->input->get('h', $this->input->get('help'))
 			|| empty($this->input->args[0])
@@ -42,7 +42,7 @@ AcliApplicationCli extends JApplicationCli
 			return;
 		}
 
-		$className = 'AcliUserinterface' . ucfirst($this->config->get('interface', 'cli'));
+		$className = 'JacliUserinterface' . ucfirst($this->config->get('interface', 'cli'));
 
 		$this->userInterface = new $className;
 
@@ -73,13 +73,13 @@ AcliApplicationCli extends JApplicationCli
 	 */
 	protected function fetchConfigurationData($file = '', $class = 'JConfig')
 	{
-		return AcliApplicationHelper::fetchConfigurationData($this->input->get('application'));
+		return JacliApplicationHelper::fetchConfigurationData($this->input->get('application'));
 	}
 
 	/**
 	 * Display a help message
 	 *
-	 * @return \AcliApplicationCli
+	 * @return \JacliApplicationCli
 	 */
 	private function help()
 	{
@@ -161,7 +161,7 @@ AcliApplicationCli extends JApplicationCli
 	 * @param string $text
 	 * @param bool   $nl
 	 *
-	 * @return AcliApplicationCli|JApplicationCli
+	 * @return JacliApplicationCli|JApplicationCli
 	 */
 	public function out($text = '', $nl = true)
 	{
@@ -197,7 +197,7 @@ AcliApplicationCli extends JApplicationCli
 	 * @param mixed  $message array or string
 	 * @param string $type
 	 *
-	 * @return AcliApplicationCli
+	 * @return JacliApplicationCli
 	 */
 	public function displayMessage($message, $type = 'message')
 	{
@@ -216,7 +216,7 @@ AcliApplicationCli extends JApplicationCli
 	 */
 	protected function fetchController()
 	{
-		$base = 'AcliController';
+		$base = 'JacliController';
 
 		$sub = $this->input->args[0];
 

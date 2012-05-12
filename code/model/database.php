@@ -8,7 +8,7 @@
 /**
  * @todo let JDatabaseXXX do this stuff ;)
  */
-class AcliModelDatabase extends JModelBase
+class JacliModelDatabase extends JModelBase
 {
 	private $sql;
 
@@ -54,7 +54,7 @@ class AcliModelDatabase extends JModelBase
 	/**
 	 * Create the database
 	 *
-	 * @return AcliModelDatabase
+	 * @return JacliModelDatabase
 	 *
 	 * @throws UnexpectedValueException
 	 * @throws Exception
@@ -91,7 +91,7 @@ class AcliModelDatabase extends JModelBase
 	 *
 	 * @param $dbName
 	 *
-	 * @return AcliModelDatabase
+	 * @return JacliModelDatabase
 	 *
 	 * @throws UnexpectedValueException
 	 * @throws Exception
@@ -133,7 +133,7 @@ class AcliModelDatabase extends JModelBase
 	 *
 	 * @param $dbName
 	 *
-	 * @return AcliModelDatabase
+	 * @return JacliModelDatabase
 	 *
 	 * @throws Exception
 	 */
@@ -152,7 +152,7 @@ class AcliModelDatabase extends JModelBase
 	 *
 	 * @param string $query The SQL query.
 	 *
-	 * @return    AcliModelDatabase    This object to support chaining.
+	 * @return    JacliModelDatabase    This object to support chaining.
 	 */
 	public function setQuery($query)
 	{

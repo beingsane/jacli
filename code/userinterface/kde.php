@@ -8,7 +8,7 @@
 /**
  * A KDE interface.
  */
-class AcliUserinterfaceKde extends AcliUserinterface
+class JacliUserinterfaceKde extends JacliUserinterface
 {
 	/**
 	 * Get a value from the user.
@@ -60,7 +60,7 @@ class AcliUserinterfaceKde extends AcliUserinterface
 	 * @param string $type
 	 *
 	 * @throws UnexpectedValueException
-	 * @return AcliUserinterface
+	 * @return JacliUserinterface
 	 */
 	public function displayMessage($message, $type = 'message')
 	{

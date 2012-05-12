@@ -4,11 +4,11 @@
  * Date: 10.05.12
  * Time: 12:40
  */
-class AcliApplicationInterfaceDrupal extends AcliApplicationInterface
+class JacliApplicationInterfaceDrupal extends JacliApplicationInterface
 {
 	protected $name = 'joomla-cms';
 
-	public function createAdminUser(AcliModelDatabase $db)
+	public function createAdminUser(JacliModelDatabase $db)
 	{
 		// TODO: Implement createAdminUser() method.
 	}
@@ -29,7 +29,7 @@ class AcliApplicationInterfaceDrupal extends AcliApplicationInterface
 
 		$this->config->set('db_name', $this->config->get('target'));
 
-		$dbModel = new AcliModelDatabase($this->config);
+		$dbModel = new JacliModelDatabase($this->config);
 
 		$this->out(sprintf('Creating database %s ...', $this->config->get('db_name')), false);
 		$dbModel->createDB();

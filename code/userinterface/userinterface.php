@@ -5,7 +5,7 @@
  * Time: 13:44
  */
 
-abstract class AcliUserinterface
+abstract class JacliUserinterface
 {
 	/**
 	 * @var JApplicationCli
@@ -38,7 +38,7 @@ abstract class AcliUserinterface
 	 * @param string $type
 	 *
 	 * @throws UnexpectedValueException
-	 * @return AcliUserinterface
+	 * @return JacliUserinterface
 	 */
 	abstract public function displayMessage($message, $type = 'message');
 }

@@ -4,15 +4,15 @@
  * Date: 11.05.12
  * Time: 12:21
  */
-class AcliModelTargetapp extends JModelBase
+class JacliModelTargetapp extends JModelBase
 {
 	/**
-	 * @var AcliApplicationCli
+	 * @var JacliApplicationCli
 	 */
 	private $application;
 
 	/**
-	 * @var AcliApplicationInterface
+	 * @var JacliApplicationInterface
 	 */
 	private $interface = null;
 
@@ -31,11 +31,11 @@ class AcliModelTargetapp extends JModelBase
 	/**
 	 * Get a list of installed applications.
 	 *
-	 * @return AcliModelDeploy
+	 * @return JacliModelDeploy
 	 */
 	public function listApplications()
 	{
-		$list = AcliApplicationHelper::getApplicationList();
+		$list = JacliApplicationHelper::getApplicationList();
 
 		$message = array();
 
