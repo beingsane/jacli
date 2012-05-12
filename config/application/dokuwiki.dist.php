@@ -5,7 +5,7 @@
  * Time: 18:34
  */
 
-class AcliConfigDokuwiki extends JConfig
+class JacliConfigDokuwiki extends JConfig
 {
 	public $lang = 'en';
 	public $license = 0;

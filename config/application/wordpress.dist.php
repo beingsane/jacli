@@ -5,7 +5,7 @@
  * Time: 21:57
  */
 
-class AcliConfigWordpress extends JConfig
+class JacliConfigWordpress extends JConfig
 {
 	// Database credentials
 	public $db_type = 'mysqli';

@@ -5,7 +5,7 @@
  * Time: 17:55
  */
 
-class AcliConfigDrupal extends JConfig
+class JacliConfigDrupal extends JConfig
 {
 	// Database credentials
 	public $db_type = 'mysqli';

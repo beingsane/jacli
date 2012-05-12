@@ -74,8 +74,4 @@ class JConfig
 	 * @var string
 	 */
 	public $interface = 'cli';
-
-	public $patchDir = '';
-
-	public $patches = array();
 }

@@ -5,7 +5,7 @@
  * Time: 17:55
  */
 
-class AcliConfigJoomlacms extends JConfig
+class JacliConfigJoomlacms extends JConfig
 {
 	// Database credentials
 	public $db_type = 'mysqli';
