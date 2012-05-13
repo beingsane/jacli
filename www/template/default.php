@@ -4,6 +4,8 @@
  * Date: 04.05.12
  * Time: 04:27
  */
+
+$do = JFactory::getApplication()->input->get('do');
 ?>
 
 <!DOCTYPE html>
@@ -38,9 +40,10 @@
 
 			<div class="nav-collapse">
 				<ul class="nav">
-					<li class="active"><a href="#">Deploy</a></li>
-					<li><a href="#about">About</a></li>
-					<li><a href="#contact">Contact</a></li>
+					<? $class = ('' == $do) ? 'active' : '' ?>
+					<li class="<?= $class ?>"><a href="<?= JURI::root() ?>index.php">Home</a></li>
+					<? $class = ('deploy' == $do) ? 'active' : '' ?>
+					<li class="<?= $class ?>"><a href="<?= JURI::root() ?>index.php?do=deploy">Deploy</a></li>
 				</ul>
 			</div>
 		</div>
@@ -48,53 +51,7 @@
 </div>
 
 <div class="container">
-	<h1>Deploy</h1>
-
-	<? // @todo move
-	if ($this->input->get('target')):
-		$model = new AcliModelDeploy($this->config);
-
-		$model->deploy();
-	endif;
-	?>
-
-	<form action="<?= JURI::current(); ?>">
-		<div class="row-fluid">
-
-			<div class="span6">
-				<div class="well">
-
-					<ul>
-						<li>
-							<h2 id="appLabel">Application</h2> <?= $this->lists['appversion'] ?>
-						</li>
-						<li>
-							<label>Target folder </label><input type="text" name="target"/>
-						</li>
-						<li><h3>Primary Configuration</h3></li>
-						<? foreach ($this->cfg as $key => $v) : ?>
-						<li>
-							<label for="<?= $key ?>"><?= ucfirst($key) ?></label>
-							<input id="<?= $key ?>" name="<?= $key ?>" value="<?= $v ?>"/>
-						</li>
-						<? endforeach; ?>
-					</ul>
-				</div>
-			</div>
-
-			<div class="span6">
-				<div id="appConfig" class="well hero-unit">
-					<!-- Application configuration -->
-				</div>
-
-			</div>
-		</div>
-		<div class="buttonbox well">
-			<input type="submit" class="btn btn-primary"/>
-		</div>
-
-	</form>
-
+	<!-- JacliApplicationOutput -->
 	<footer class="footer">
 		<p class="pull-right"><a href="#">Back to top</a></p>
 

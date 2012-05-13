@@ -26,67 +26,53 @@ class JacliApplicationWeb extends JApplicationWeb
 	 *
 	 * This method should include your custom code that runs the application.
 	 *
+	 * @throws RuntimeException
 	 * @return  void
 	 *
 	 * @since   11.3
 	 */
 	protected function doExecute()
 	{
-		$do = $this->input->get('do');
+		// Get the controller instance based on the request.
+		$controller = $this->fetchController();
+		$model = $this->fetchModel();
 
-		switch ($do)
-		{
-			case 'getAppConfig':
-				$resp = new stdClass;
-				$resp->text = JacliApplicationHelper::parseAppConfig($this->input->get('app'));
-				$resp->status = 0;
-
-
-
-				echo json_encode($resp);
-
-				return;
-				break;
-		}
+		// Execute the controller.
+		$controller->execute();
 
 		$this->config->set('target', $this->input->get('target'));
 
-		//---View start
+		$viewName = $this->input->get('view', $this->input->get('do', 'default'));
 
-		$apps = array(array('items' => array('Select...')));
+		if( ! $viewName)
+			throw new RuntimeException(__METHOD__.' - No view');
 
-		foreach (JacliApplicationHelper::getApplicationList() as $afile => $app)
+		$className = 'JacliView' . ucfirst($viewName).'View';
+
+		$layouts = new SplPriorityQueue;
+		$layouts->insert(JPATH_BASE.'/view/'.$viewName.'/tmpl', 0);
+
+		/* @var JViewHtml $view */
+		$view = new $className($model, $layouts);
+
+		$output = $view->render();
+
+		if ('get' == $viewName)
 		{
-			$vs = array();
+			// This is a JSON output
 
-			foreach ($app->versions as $version)
-			{
-				$vs[$afile . '|' . $version->version] = (string) $version->version;
-			}
+			echo $output;
 
-			$apps[] = array('text' => $app->name, 'items' => $vs);
+			return;
 		}
-
-		$options['list.attr'] = 'onchange="Jacli.changeApp(this, \'appConfig\');"';
-		$this->lists['appversion'] = JHtml::_('select.groupedlist', $apps, 'appversion', $options);
-
-		$this->cfg = array();
-
-		foreach ($this->config->toObject() as $k => $v)
-		{
-			if (in_array($k, array('application', 'version', 'target', 'execution', 'uri',)))
-				continue;
-
-			$this->cfg[$k] = $v;
-		}
-
-		//---View end
 
 		ob_start();
 
 		include JACLI_PATH_TEMPLATE . '/default.php';
 
 		$html = ob_get_clean();
+
+		$html = str_replace('<!-- JacliApplicationOutput -->', $output, $html);
 
 		$this->appendBody($html);
 	}
@@ -116,14 +102,6 @@ class JacliApplicationWeb extends JApplicationWeb
 	public function getUserInput($message, $type = 'text', array $values = array(), $required = true)
 	{
 		return __METHOD__ . '---Missing value---' . $message;
-		$retVal = $this->userInterface->getUserInput($message, $type, $values);
-
-		$retVal = trim($retVal);
-
-		if (!$retVal && $required)
-			throw new Exception('User abort', 666);
-
-		return $retVal;
 	}
 
 	/**
@@ -140,6 +118,68 @@ class JacliApplicationWeb extends JApplicationWeb
 	protected function fetchConfigurationData($file = '', $class = 'JConfig')
 	{
 		return JacliApplicationHelper::fetchConfigurationData($this->input->get('application'));
+	}
+
+	/**
+	 * Method to get a controller object based on the command line input.
+	 *
+	 * @return  JControllerBase
+	 *
+	 * @since   1.0
+	 * @throws  InvalidArgumentException
+	 */
+	protected function fetchController()
+	{
+		$base = 'JacliControllerweb';
+
+		$sub = strtolower($this->input->get('do', 'default'));
+
+		$className = $base . ucfirst($sub);
+
+		// If the requested controller exists let's use it.
+		if (class_exists($className))
+		{
+			return new $className($this->input, $this);
+		}
+
+		// Nothing found. Panic.
+		throw new InvalidArgumentException('Controller not found: ' . $sub, 400);
+	}
+
+	/**
+	 * Method to get a controller object based on the command line input.
+	 *
+	 * @return  JControllerBase
+	 *
+	 * @since   1.0
+	 * @throws  InvalidArgumentException
+	 */
+	protected function fetchModel()
+	{
+		$base = 'JacliModel';
+
+		$sub = strtolower($this->input->get('do', 'default'));
+
+		//	$sub = $this->input->args[0];
+
+		$className = $base . ucfirst($sub);
+
+		// If the requested controller exists let's use it.
+		if (class_exists($className))
+		{
+			return new $className;//($this->input, $this);
+		}
+
+		// Nothing found. Don't Panic.
+		return new JacliModelDefault(new JRegistry);
+
+		// Nothing found. Panic.
+		throw new InvalidArgumentException('Model not found: ' . $sub, 400);
+	}
+
+	public function getConfig()
+	{
+		return $this->config->toObject();
 	}
 
 }
