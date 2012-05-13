@@ -5,6 +5,8 @@
  * Time: 04:51
  */
 
+version_compare(PHP_VERSION, '5.3', '>=') || die('This script requires PHP >= 5.3');
+
 // Bootstrap the application.
 $path = getenv('JACLI_HOME');
 
@@ -25,7 +27,7 @@ try
 	JLog::addLogger(array('logger' => 'echo'), JLog::ALL);
 
 	// Instantiate the application.
-	$application = JApplicationWeb::getInstance('AcliApplicationWeb');
+	$application = JApplicationWeb::getInstance('JacliApplicationWeb');
 
 	// Store the application.
 	JFactory::$application = $application;

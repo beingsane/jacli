@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 require 'Qt4'
 require 'jacli'
 

@@ -13,19 +13,26 @@ Jacli = new Class ({
         document.id('appLabel').set('text', f + parts[0].substr(1));
 
         new Request.JSON({
-            url:'index.php?do=getAppConfig&app=' + parts[0],
+            url:'index.php?do=get&item=appconfig&app=' + parts[0],
 
             onRequest : function() {
                 // @todo spinner
             },
 
             onComplete : function(response) {
-                console.log(response.text);
-                container.set('html', response.text);
+                if(response.status)
+                {
+                    container.innerHTML = '<p style="color: red;">'+ response.debug+'</p>'+ response.text;
+                }
+                else
+                {
+                    container.set('html', response.text);
+                }
             },
 
             onFailure : function() {
                 // @todo error handling
+                container.set('html', 'The request failed');
             }
 
         }).send();

@@ -209,7 +209,7 @@ JacliApplicationCli extends JApplicationCli
 	/**
 	 * Method to get a controller object based on the command line input.
 	 *
-	 * @return  JController
+	 * @return  JControllerBase
 	 *
 	 * @since   1.0
 	 * @throws  InvalidArgumentException

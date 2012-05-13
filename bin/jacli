@@ -1,4 +1,4 @@
-#!/usr/bin/php
+#!/usr/bin/env php
 <?php
 /**
  * Command line script to run the Application.
@@ -8,6 +8,10 @@
  * @copyright  Copyright (C) {COPYRIGHT}. All rights reserved.
  * @license    GNU General Public License version 2 or later; see LICENSE
  */
+
+'cli' == PHP_SAPI || die('This script must be executed from the command line.');
+
+version_compare(PHP_VERSION, '5.3', '>=') || die('This script requires PHP >= 5.3');
 
 // Bootstrap the application.
 $path = getenv('JACLI_HOME');
@@ -22,9 +26,6 @@ try
 	{
 		require_once realpath(__DIR__ . '/../code/bootstrap.php');
 	}
-
-	// Set all loggers to echo.
-	JLog::addLogger(array('logger' => 'echo'), JLog::ALL);
 
 	// Instantiate the application.
 	$application = JApplicationCli::getInstance('JacliApplicationCli');

@@ -65,7 +65,7 @@ class JacliApplicationHelper
 			{
 				require $file;
 
-				$className = 'JacliConfig' . $targetApplication;
+				$className = 'JacliConfig' . ucfirst($targetApplication);
 
 				return new $className;
 			}
@@ -93,15 +93,6 @@ class JacliApplicationHelper
 			if (is_object($v) || is_array($v))
 			{
 				//@todo override for objects...
-				//$this->out('  --' . $k);
-
-				//if (!count($v))
-				//	$this->out('    (empty)');
-
-				foreach ($v as $k1 => $v1)
-				{
-					//	$this->out('    (' . $k1 . ' = ' . $v1 . ')');
-				}
 			}
 			else
 			{
@@ -111,7 +102,6 @@ class JacliApplicationHelper
 				{
 					$config->set($k, $test);
 				}
-//				$this->out('  --' . $k . ' (' . $v . ')');
 			}
 		}
 
@@ -198,30 +188,7 @@ class JacliApplicationHelper
 		if (!class_exists($className))
 			throw new Exception(__METHOD__ . 'Config class not found: ' . $className);
 
-		$cfg = new $className;
-
-		$html = array();
-
-		$html[] = '<h3>Application configuration</h3>';
-
-		$html[] = '<ul>';
-
-		$blacks = array('application', 'version', 'interface', 'gitBin', 'browserBin',);
-
-		foreach ($cfg as $k => $v)
-		{
-			if (in_array($k, $blacks))
-				continue;
-
-			$html[] = '<li>';
-			$html[] = '<label for="' . $k . '">' . ucfirst($k) . '</label>';
-			$html[] = '<input id="' . $k . '" name="' . $k . '" value="' . $v . '"/>';
-			$html[] = '</li>';
-		}
-
-		$html[] = '</ul>';
-
-		return implode("\n", $html);
+		return new $className;
 	}
 
 }
