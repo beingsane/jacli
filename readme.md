@@ -1,4 +1,4 @@
-# JACLI
+# JACLI - ˈdʒæk ˈliː
 
 ## Abstract
 JACLI is a PHP application based on the Joomla! Platform. It can be used to install other PHP applications.
