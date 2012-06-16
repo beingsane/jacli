@@ -23,11 +23,11 @@ class JacliViewJson extends JViewHtml
 	 */
 	public function render()
 	{
-		$resp = new stdClass;
-		$resp->text = $this->text . parent::render();
-		$resp->debug = $this->debug;
-		$resp->status = $this->status;
+		$response = new stdClass;
+		$response->text = $this->text . parent::render();
+		$response->debug = $this->debug;
+		$response->status = $this->status;
 
-		echo json_encode($resp);
+		echo json_encode($response);
 	}
 }

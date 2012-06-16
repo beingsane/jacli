@@ -133,4 +133,9 @@ EOT;
 
 		return $message;
 	}
+
+	public function fetchUpdates()
+	{
+		// TODO: Implement fetchUpdates() method.
+	}
 }

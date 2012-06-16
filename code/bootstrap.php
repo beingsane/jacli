@@ -15,35 +15,35 @@ define('_JEXEC', 1);
 ini_set('max_execution_time', 0);
 
 // Note, you would not use these settings in production.
-error_reporting(-1);
+error_reporting(- 1);
 ini_set('display_errors', true);
 
 // Define the path for the Joomla Platform.
-if (!defined('JPATH_PLATFORM'))
+if(false == defined('JPATH_PLATFORM'))
 {
-	$platform = getenv('JOOMLA_PLATFORM_PATH');
+    $platform = getenv('JOOMLA_PLATFORM_PATH');
 
-	if ($platform)
-	{
-		define('JPATH_PLATFORM', realpath($platform . '/libraries'));
-	}
-	else
-	{
-		define('JPATH_PLATFORM', realpath(__DIR__ . '/../../joomla/libraries'));
-	}
+    if($platform)
+    {
+        define('JPATH_PLATFORM', realpath($platform.'/libraries'));
+    }
+    else
+    {
+        define('JPATH_PLATFORM', realpath(__DIR__.'/../../joomla/libraries'));
+    }
 }
 
 // Ensure that required path constants are defined.
-defined('JPATH_BASE')      || define('JPATH_BASE', realpath(__DIR__));
-defined('JPATH_ROOT')      || define('JPATH_ROOT', JPATH_BASE);
-defined('JACLI_PATH_DATA') || define('JACLI_PATH_DATA', realpath(JPATH_ROOT . '/../data'));
+defined('JPATH_BASE') || define('JPATH_BASE', realpath(__DIR__));
+defined('JPATH_ROOT') || define('JPATH_ROOT', JPATH_BASE);
+defined('JACLI_PATH_DATA') || define('JACLI_PATH_DATA', realpath(JPATH_ROOT.'/../data'));
 
 // Import the platform(s).
-require_once JPATH_PLATFORM . '/import.php';
+require_once JPATH_PLATFORM.'/import.php';
 
 // Make sure that the Joomla Platform has been successfully loaded.
-if (!class_exists('JLoader'))
-	throw new Exception('Joomla Platform not loaded.', 1);
+if(false == class_exists('JLoader'))
+    throw new Exception('Joomla Platform not loaded.', 1);
 
 //@todo deprecate jimports
 jimport('joomla.filesystem.folder');
@@ -63,20 +63,20 @@ spl_autoload_register('jacliLoader', true, true);
  */
 function jacliLoader($className)
 {
-	if(0 !== strpos($className, 'Jacli'))
-		return true;
+    if(0 !== strpos($className, 'Jacli'))
+        return true;
 
-	$parts = preg_split('/(?<=[a-z])(?=[A-Z])/x', substr($className, 5));
+    $parts = preg_split('/(?<=[a-z])(?=[A-Z])/x', substr($className, 5));
 
-	// If there is only one part we want to duplicate that part for generating the path.
-	$parts = (1 === count($parts))
-		? array($parts[0], $parts[0])
-		: $parts;
+    // If there is only one part we want to duplicate that part for generating the path.
+    $parts = (1 === count($parts))
+        ? array($parts[0], $parts[0])
+        : $parts;
 
-	$path = JPATH_BASE.'/'.strtolower(implode('/', $parts)).'.php';
+    $path = JPATH_BASE.'/'.strtolower(implode('/', $parts)).'.php';
 
-	if(file_exists($path))
-		return include $path;
+    if(file_exists($path))
+        return include $path;
 
-	return true;
+    return true;
 }

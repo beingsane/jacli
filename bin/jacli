@@ -13,33 +13,23 @@
 
 version_compare(PHP_VERSION, '5.3', '>=') || die('This script requires PHP >= 5.3');
 
-// Bootstrap the application.
-$path = getenv('JACLI_HOME');
-
 try
 {
-	if ($path)
-	{
-		require_once $path . '/bootstrap.php';
-	}
-	else
-	{
-		require_once realpath(__DIR__ . '/../code/bootstrap.php');
-	}
+    require_once realpath(__DIR__.'/../code/bootstrap.php');
 
-	// Instantiate the application.
-	$application = JApplicationCli::getInstance('JacliApplicationCli');
+    // Instantiate the application.
+    $application = JApplicationCli::getInstance('JacliApplicationCli');
 
-	// Store the application.
-	JFactory::$application = $application;
+    // Store the application.
+    JFactory::$application = $application;
 
-	// Execute the application.
-	$application->execute();
+    // Execute the application.
+    $application->execute();
 }
-catch (Exception $e)
+catch(Exception $e)
 {
-	// An exception has been caught, just echo the message.
-	fwrite(STDOUT, "\n" . '*ERROR* : ' . $e->getMessage() . "\n");
+    // An exception has been caught, just echo the message.
+    fwrite(STDOUT, "\n".'*ERROR* : '.$e->getMessage()."\n");
 
-	exit($e->getCode());
+    exit($e->getCode());
 }

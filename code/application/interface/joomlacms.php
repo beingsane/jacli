@@ -243,20 +243,29 @@ class JacliApplicationInterfaceJoomlacms extends JacliApplicationInterface
 		return $makepass;
 	}
 
-
+	/**
+	 * @return JacliApplicationInterfaceJoomlacms
+	 * @throws Exception
+	 */
 	public function cleanup()
 	{
 		// TODO: Implement cleanup() method.
 		$this->out('Deleting installation directory...', false);
 
 		if (!JFolder::delete($this->config->get('targetDir') . '/installation'))
-			throw new Exception(JError::getError(), 1);
+			throw new Exception(sprintf(
+				'Unable to delete the folder: %s', $this->config->get('targetDir') . '/installation')
+				, 1);
 
 		$this->out('ok');
 
 		return $this;
 	}
 
+	/**
+	 * @return JacliApplicationInterfaceJoomlacms
+	 * @throws Exception
+	 */
 	public function setupDatabase()
 	{
 		$installSql = $this->config->get('targetDir') . '/installation/sql/mysql/joomla.sql';
@@ -284,6 +293,9 @@ class JacliApplicationInterfaceJoomlacms extends JacliApplicationInterface
 		return $this;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getBrowserLinks()
 	{
 		return array(
@@ -294,12 +306,10 @@ class JacliApplicationInterfaceJoomlacms extends JacliApplicationInterface
 	/**
 	 * Displays a result message.
 	 *
-	 * @return array
+	 * @return array|\JacliApplicationInterface
 	 */
 	public function getResultMessage()
 	{
-		// TODO: Implement displayResult() method.
-
 		$message = array();
 
 		$message[] = '';
@@ -311,5 +321,13 @@ class JacliApplicationInterfaceJoomlacms extends JacliApplicationInterface
 		$message[] = '';
 
 		return $message;
+	}
+
+
+	public function fetchUpdates()
+	{
+		// TODO: Implement fetchUpdates() method.
+
+
 	}
 }

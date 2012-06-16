@@ -27,9 +27,28 @@ JacliApplicationCli extends JApplicationCli
 
 	public function  doExecute()
 	{
+		if($this->input->get('nocolors'))
+		{
+			define('COLORS', 0);
+		}
+		else
+		{
+			//-- Got xampp and probs setting the include path ? eclipse ?..
+			set_include_path(get_include_path().PATH_SEPARATOR.'/opt/lampp/lib/php');
+
+			//-- El KuKu's ConsoleColor - see: http://elkuku.github.com/pear/
+			//@include 'elkuku/console/Color.php';
+
+			//-- OR -- PEAR's ConsoleColor
+			if( ! class_exists('Console_Color2')) @include 'Console/Color2.php';
+
+			//-- Any color ?
+			define('COLORS', class_exists('Console_Color2'));
+		}
+
 		$this->verbose = ($this->input->get('q', $this->input->get('quiet'))) ? false : true;
 
-		$this->out('JACLI - A Joomla! CLI.');
+		$this->output('JACLI - A Joomla! CLI.', true, '', '', 'bold');
 
 		JacliApplicationHelper::getOverrides($this->config);
 
@@ -60,17 +79,15 @@ JacliApplicationCli extends JApplicationCli
 		}
 	}
 
-	/**
-	 * Fetch the configuration data for the application.
-	 *
-	 * @param string $file
-	 * @param string $class
-	 *
-	 * @throws RuntimeException
-	 * @return  object  An object to be loaded into the application configuration.
-	 *
-	 * @since   1.0
-	 */
+    /**
+     * Fetch the configuration data for the application.
+     *
+     * @param string $file
+     * @param string $class
+     *
+     * @return mixed|object An object to be loaded into the application configuration.
+     * @since   1.0
+     */
 	protected function fetchConfigurationData($file = '', $class = 'JConfig')
 	{
 		return JacliApplicationHelper::fetchConfigurationData($this->input->get('application'));
@@ -85,27 +102,30 @@ JacliApplicationCli extends JApplicationCli
 	{
 		$cfg = $this->config->toObject();
 
-		$this->out();
-		$this->out('========================================');
-		$this->out('Usage:    jacli <command> [switches]');
-		$this->out('========================================');
-		$this->out();
-		$this->out('Commands');
-		$this->out('========');
-		$this->out('  install       Install an application.');
-		$this->out('  listapps      Lists all known applications.');
-		$this->out('  listtargets   Lists all targets under the given httpRoot.');
-		$this->out('  deletetarget  <target>  Deletes a target.');
-		$this->out();
-		$this->out('Switches');
-		$this->out('========');
-		$this->out('  -h  --help   Prints this usage information.');
-		$this->out('  -q  --quiet  Do not produce any output (except errors).');
-		$this->out();
-		$this->out('  --target  Specify a target directory.');
-		$this->out();
-		$this->out('Overrideable');
-		$this->out('============');
+		$this->output()
+			->output('========================================')
+			->output('Usage:    ')
+			->output('jacli', false, '', '', 'bold')
+			->output(' <command>', false, 'green')
+			->output(' [switches]', true, 'yellow')
+			->output('========================================')
+			->output()
+			->output('Commands', true, 'green')
+			->output('========')
+			->output('  install       Install an application.')
+			->output('  listapps      Lists all known applications.')
+			->output('  listtargets   Lists all targets under the given httpRoot.')
+			->output('  deletetarget  <target>  Deletes a target.')
+			->output()
+			->output('Switches', true, 'yellow')
+			->output('========')
+			->output('  -h  --help   Prints this usage information.')
+			->output('  -q  --quiet  Do not produce any output (except errors).')
+			->output()
+			->output('  --target  Specify a target directory.')
+			->output()
+			->output('Overrideable configuration values', true, 'cyan')
+			->output('============');
 
 		foreach ($cfg as $k => $v)
 		{
@@ -114,43 +134,50 @@ JacliApplicationCli extends JApplicationCli
 
 			if (is_object($v) || is_array($v))
 			{
-				$this->out('  --' . $k);
+				$this->output('  --' . $k);
 
 				if (!count($v))
-					$this->out('    (empty)');
+					$this->output('    (empty)');
 
 				foreach ($v as $k1 => $v1)
 				{
-					$this->out('    (' . $k1 . ' = ' . $v1 . ')');
+					$this->output('    (' . $k1 . ' = ' . $v1 . ')');
 				}
 			}
 			else
 			{
-				$this->out('  --' . $k . ' (' . $v . ')');
+				$this->output('  --' . $k . ' (' . $v . ')');
 			}
 		}
 
 		if ('' == $this->config->get('application'))
 		{
-			$this->out();
-			$this->out('!! NOTE !! For application specific overrides use: jacli --help --application <application>');
+			$this->output()
+				->output('NOTE:', false, '', '', 'bold')
+				->output(' For application specific overrides use: jacli --help --application <application>');
 		}
 
-		$this->out();
-		$this->out('Optional');
-		$this->out('========');
-		$this->out('  --updaterepo  Update the repository (if applicable)');
-
-		$this->out();
-		$this->out(str_repeat('_', 80));
-		$this->out('Examples');
-		$this->out('========');
-		$this->out();
-		$this->out('jacli install --target test1');
-		$this->out('  Deploys an application to the target \'test1\' according to the options specified in the configuration.');
-		$this->out();
-		$this->out('jacli install --target test1 --version git --updaterepo');
-		$this->out('  Deploys the version \'git\' of an application, updating the sources first.');
+		$this->output()
+			->output('Optional', true, 'brown')
+			->output('========')
+			->output('  --updaterepo  Update the repository (if applicable)')
+			->output()
+			->output(str_repeat('_', 80))
+			->output('Examples', true, '', '', 'bold')
+			->output('========')
+			->output()
+			->output('jacli install --target test1', true, 'green')
+			->output('  Deploys an application to the target "test1" with to the options specified in the configuration.')
+			->output('  Settings that have not been specified in the configuration will be "asked" according to the specified', false)
+			->output(' interface', true, '', '', 'bold')
+			->output()
+			->output('jacli install --target test1 --version development --updaterepo', true, 'green')
+			->output('  Deploys the version "development" of an application to the target "test1", updating the sources first.')
+			->output()
+			->output('jacli install --application joomlacms --version 4.0 --target test1', true, 'green')
+			->output('  Deploys the version "4.0" of the application Joomla! CMS" to the target "test1" (if available ;) ).')
+			->output()
+			->output('have Fun =;)', true, 'green', '', 'bold');
 
 		return $this;
 	}
@@ -158,14 +185,39 @@ JacliApplicationCli extends JApplicationCli
 	/**
 	 * Write a string to standard output.
 	 *
-	 * @param string $text
-	 * @param bool   $nl
+	 * @param string $text The text to display
+	 * @param bool   $nl   Should a new line be printed.
+	 * @param string $fg   Foreground color.
+	 * @param string $bg   Background color.
+	 * @param string $style
 	 *
-	 * @return JacliApplicationCli|JApplicationCli
+	 * @return \JacliApplicationCli|\JApplicationCli
 	 */
-	public function out($text = '', $nl = true)
+	public function output($text = '', $nl = true, $fg = '', $bg = '', $style = '')
 	{
-		return ($this->verbose) ? parent::out($text, $nl) : $this;
+		if(false == $this->verbose)
+			return $this;
+
+		static $color = null;
+
+		if(is_null($color))
+			$color = new Console_Color2;
+
+		if($fg && COLORS) $this->out($color->fgcolor($fg), false);
+		if($bg && COLORS) $this->out($color->bgcolor($bg), false);
+
+		if($style && COLORS)
+		{
+			$cs = $color->getColorCodes();
+		//	var_dump($cs);
+			$this->out("\033[".$cs['style'][$style].'m', false);
+		}
+
+		$this->out($text, $nl);
+
+		if(($fg || $bg || $style) && COLORS) $this->out($color->convert('%n'), false);
+
+		return $this;
 	}
 
 	/**
@@ -225,8 +277,6 @@ JacliApplicationCli extends JApplicationCli
 		// If the requested controller exists let's use it.
 		if (class_exists($className))
 		{
-			//$input = new JInput;
-
 			return new $className($this->input, $this);
 		}
 

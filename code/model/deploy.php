@@ -93,7 +93,9 @@ class JacliModelDeploy extends JModelBase
 		$this->application->out(sprintf('Deleting the folder: %s', $targetDir));
 
 		if (!JFolder::delete($targetDir))
-			throw new Exception(JError::getError());
+			throw new Exception(sprintf(
+					'Unable to delete the folder: %s', $targetDir)
+				, 1);
 
 		$this->application->out('The target has been deleted');
 	}
@@ -219,8 +221,10 @@ class JacliModelDeploy extends JModelBase
 
 		if (!JFolder::copy($this->state->get('sourceDir'), $this->state->get('targetDir')))
 		{
-			//@todo legacy
-			throw new Exception(JError::getError(), 1);
+				throw new Exception(sprintf(
+						'Unable to copy the folder %s to %s'
+						, $this->state->get('sourceDir'), $this->state->get('targetDir'))
+					, 1);
 		}
 
 		$this->out('ok');

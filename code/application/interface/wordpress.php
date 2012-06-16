@@ -76,4 +76,9 @@ class JacliApplicationInterfaceWordpress extends JacliApplicationInterface
 
 		return $message;
 	}
+
+	public function fetchUpdates()
+	{
+		// TODO: Implement fetchUpdates() method.
+	}
 }
