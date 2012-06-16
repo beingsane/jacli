@@ -1,0 +1,30 @@
+complete -F _jacli jacli
+
+_jacli() {
+    local cur prev opts base
+
+    COMPREPLY=()
+
+    cur=${COMP_WORDS[COMP_CWORD]}
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+    opts="install listapps listtargets deletetarget"
+
+    longargs="--application --version --httpRoot --httpBase --interface --target --help --quiet"
+
+    case "${prev}" in
+        install)
+        COMPREPLY=($(compgen -W "${longargs}" -- ${cur}))
+        return 0
+        ;;
+
+    esac
+
+    if [ $COMP_CWORD -lt 2 ]; then
+        COMPREPLY=($(compgen -W "${opts}" -- ${cur}))
+    else
+        COMPREPLY=($(compgen -W "${longargs}" -- ${cur}))
+    fi
+
+    return 0
+}
