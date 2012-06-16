@@ -18,16 +18,14 @@ Currently supported applications (in alphabetical order ```;)```):
 The sources are **not** provided and can be downloaded automatically or copied manually to a given directory.
 
 ## Usage
-Open a terminal window and type:
+Open a terminal window and type: ```jacli --help```
 
-```jacli --help```
-
-Supported interfaces:
+## Supported interfaces:
 
 * CLI - The default interface - should work on all operating systems
 * KDE, Gnome - Message boxes
 
-Frontends:
+## Frontends:
 
 * Web (WIP)
 * Ruby/QT, Python/QT, C++/QT (very WIP)
