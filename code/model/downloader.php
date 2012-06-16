@@ -46,7 +46,7 @@ class JacliModelDownloader extends JModelBase
 		else
 		{
 			if (!JFolder::create($path))
-				throw new Exception(__METHOD__ . ' - can not create folder: ' . JError::getError());
+				throw new Exception(__METHOD__ . ' - can not create folder: ' . $path);
 
 			$application->out('Cloning git repository...');
 
@@ -91,7 +91,7 @@ class JacliModelDownloader extends JModelBase
 		else
 		{
 			if (!JFolder::create($dir))
-				throw new Exception(__METHOD__ . ' - can not create folder: ' . JError::getError());
+				throw new Exception(__METHOD__ . ' - can not create folder: ' . $dir);
 
 			$application->out('Checking out SVN repository...');
 
@@ -126,7 +126,7 @@ class JacliModelDownloader extends JModelBase
 			return $this;
 
 		if (!JFolder::create($dir))
-			throw new Exception(__METHOD__ . ' - can not create folder: ' . JError::getError());
+			throw new Exception(__METHOD__ . ' - can not create folder: ' . $dir);
 
 		$wget = 'wget';
 

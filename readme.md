@@ -3,7 +3,7 @@
 ## Abstract
 JACLI is a PHP application based on the Joomla! Platform. It can be used to install other PHP applications.
 
-Currently supported applications (in alphabetical order ```;)```):
+Currently supported applications (in alphabetical order):
 
 * [Dokuwiki](http://dokuwiki.org)
   2012-01-25a and development (git)

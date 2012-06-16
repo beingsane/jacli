@@ -29,6 +29,8 @@ abstract class JacliApplicationInterface
 
 	abstract public function setupDatabase();
 
+	abstract public function fetchUpdates();
+
 	/**
 	 * Displays a result message.
 	 *

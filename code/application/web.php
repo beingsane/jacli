@@ -104,17 +104,14 @@ class JacliApplicationWeb extends JApplicationWeb
 		return __METHOD__ . '---Missing value---' . $message;
 	}
 
-	/**
-	 * Fetch the configuration data for the application.
-	 *
-	 * @param string $file
-	 * @param string $class
-	 *
-	 * @throws RuntimeException
-	 * @return  object  An object to be loaded into the application configuration.
-	 *
-	 * @since   1.0
-	 */
+    /**
+     * Fetch the configuration data for the application.
+     *
+     * @param string $file
+     * @param string $class
+     *
+     * @return mixed|object An object to be loaded into the application configuration.@since   1.0
+     */
 	protected function fetchConfigurationData($file = '', $class = 'JConfig')
 	{
 		return JacliApplicationHelper::fetchConfigurationData($this->input->get('application'));

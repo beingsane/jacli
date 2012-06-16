@@ -68,4 +68,9 @@ class JacliApplicationInterfaceDrupal extends JacliApplicationInterface
 
 		return array('Drupal site' => '');
 	}
+
+	public function fetchUpdates()
+	{
+		// TODO: Implement fetchUpdates() method.
+	}
 }
