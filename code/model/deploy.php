@@ -180,12 +180,17 @@ class JacliModelDeploy extends JModelBase
 		$root = $this->checkRootPath();
 
 		//-- Target
-		$target = $this->getUserInput('target', 'The name of the target directory');
+		$target = $this->state->get('target')
+            ?: $this->getUserInput('target', 'The name of the target directory');
 
-		$targetDir = $root . '/' . $target;
+        $target = $this->checkAvailable($root, $target);
 
-		if (JFolder::exists($targetDir))
-			throw new Exception('The target directory must not exist', 1);
+		$targetDir = $root.'/'.$target;
+
+        $this->state->set('target', $target);
+
+		//if (JFolder::exists($targetDir))
+		//	throw new Exception('The target directory must not exist', 1);
 
 		$this->state->set('targetDir', $targetDir);
 
@@ -211,7 +216,30 @@ class JacliModelDeploy extends JModelBase
 		return $this;
 	}
 
-	/**
+
+    /**
+     * Checks if a given folder exists, and if so, create a new name
+     * using a subsequent with the postfix _<n>.
+     *
+     * @param $checkPath
+     * @param $folder
+     * @param int $cnt
+     *
+     * @return string
+     */
+    private function checkAvailable($checkPath, $folder, $cnt = 0)
+    {
+        $f = $folder.($cnt ? '_'.$cnt : '');
+
+        $path = $checkPath.'/'.$f;
+
+        if(JFolder::exists($path))
+            return $this->checkAvailable($checkPath, $folder, ++ $cnt);
+
+        return $f;
+    }
+
+    /**
 	 * @return JacliModelDeploy
 	 * @throws Exception
 	 */

@@ -74,4 +74,11 @@ class JConfig
 	 * @var string
 	 */
 	public $interface = 'cli';
+
+    /**
+     * Should be left blank.
+     *
+     * @var string
+     */
+    public $target = '';
 }
