@@ -40,7 +40,7 @@ JacliApplicationCli extends JApplicationCli
 			//@include 'elkuku/console/Color.php';
 
 			//-- OR -- PEAR's ConsoleColor
-			if( ! class_exists('Console_Color2')) @include 'Console/Color2.php';
+			if(false == class_exists('Console_Color2')) @include 'Console/Color2.php';
 
 			//-- Any color ?
 			define('COLORS', class_exists('Console_Color2'));

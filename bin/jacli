@@ -31,5 +31,5 @@ catch(Exception $e)
     // An exception has been caught, just echo the message.
     fwrite(STDOUT, "\n".'*ERROR* : '.$e->getMessage()."\n");
 
-    exit($e->getCode());
+    exit($e->getCode() ?: 1);
 }
