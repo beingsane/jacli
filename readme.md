@@ -10,7 +10,7 @@ Currently supported applications (in alphabetical order):
 * [Drupal](http://drupal.org) (almost ```*```)
   7.14 and development (git)
 * [Joomla! CMS](http://joomla.org)
-  2.5.4 and development (git)
+  2.5.6 and development (git)
 * [Wordpress](http://wordpress.org) (almost ```*```)
   3.3.2 and development (svn)
 * ...
