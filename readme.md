@@ -23,14 +23,14 @@ Open a terminal window and type: ```jacli --help``` - that should help ;)
 ## Requirements
 * A Joomla! Platform version min 12.1 (@todo to be released)
 	An enviroment variable ```JOOMLA_PLATFORM_PATH``` set up.
-* The required sources for the applications to build can be downloaded or copied into the source directory
-	```wget``` (optional) to download package files
-	```git``` or ```svn``` (optional) to checkout from version control systems
+* The required sources for the applications to build can be downloaded or copied into the source directory.
+* ```wget``` (optional) to download package files.
+* ```git``` or ```svn``` (optional) to checkout from version control systems.
 
 ## Supported interfaces:
 
-* CLI - The default interface - should work on all operating systems
-* KDE, Gnome - Message boxes
+* CLI - The default interface - should work on all operating systems.
+* KDE, Gnome - Message boxes.
 
 ## Frontends:
 
@@ -38,12 +38,9 @@ Open a terminal window and type: ```jacli --help``` - that should help ;)
 * Ruby/QT, Python/QT, C++/QT (very WIP)
 
 ## Supported Operating Systems
-* Developed and tested only on [OpenSuSE Linux](http://opensuse.org)
-	So it should probably work on most Unixoide systems
+* Developed and tested only on [OpenSuSE Linux](http://opensuse.org) -  So it should probably work on most Unixoide systems.
 
 The CLI version should run on any system that is able to run PHP scripts.
-
-* ... **WANTED**: Developers ...
 
 If you find **your** operating system unsupported, please use the facilities here on GitHub to send me a pull request with the corresponding code changes.
 
@@ -60,4 +57,4 @@ have Fun,
 <tt>=;)</tt>
 
 <hr />
-* ```*``` - means that the application will be copied to the workspace and the database will be set up. Then you have to run the applications install routine.
+* ```*``` - The application will be copied to the workspace and the database will be set up. But you have to run the applications install routine "by hand".
