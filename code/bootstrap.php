@@ -39,7 +39,8 @@ defined('JPATH_ROOT') || define('JPATH_ROOT', JPATH_BASE);
 defined('JACLI_PATH_DATA') || define('JACLI_PATH_DATA', realpath(JPATH_ROOT.'/../data'));
 
 // Import the platform(s).
-require_once JPATH_PLATFORM.'/import.php';
+#require_once JPATH_PLATFORM.'/import.php';
+require getenv('JOOMLA_PLATFORM_PATH').'/libraries/import.php';
 
 // Make sure that the Joomla Platform has been successfully loaded.
 if(false == class_exists('JLoader'))

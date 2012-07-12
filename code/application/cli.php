@@ -198,19 +198,21 @@ JacliApplicationCli extends JApplicationCli
 		if(false == $this->verbose)
 			return $this;
 
-		static $color = null;
-
-		if(is_null($color))
-			$color = new Console_Color2;
-
-		if($fg && COLORS) $this->out($color->fgcolor($fg), false);
-		if($bg && COLORS) $this->out($color->bgcolor($bg), false);
-
-		if($style && COLORS)
+		if(COLORS)
 		{
-			$cs = $color->getColorCodes();
-		//	var_dump($cs);
-			$this->out("\033[".$cs['style'][$style].'m', false);
+			static $color = null;
+
+			if(is_null($color))
+				$color = new Console_Color2;
+
+			if($fg) $this->out($color->fgcolor($fg), false);
+			if($bg) $this->out($color->bgcolor($bg), false);
+
+			if($style)
+			{
+				$cs = $color->getColorCodes();
+				$this->out("\033[".$cs['style'][$style].'m', false);
+			}
 		}
 
 		$this->out($text, $nl);
