@@ -73,6 +73,10 @@ JacliApplicationCli extends JApplicationCli
 			// Execute the controller.
 			$controller->execute();
 		}
+		catch (JacliExceptionAbort $e)
+		{
+			$this->userInterface->displayMessage($e->getMessage());
+		}
 		catch (Exception $e)
 		{
 			$this->userInterface->displayMessage($e->getMessage(), 'error');
@@ -225,13 +229,13 @@ JacliApplicationCli extends JApplicationCli
 	/**
 	 * Get a value from the user using the given user interface.
 	 *
-	 * @param        $message
+	 * @param string $message
 	 * @param string $type
 	 * @param array  $values
 	 * @param bool   $required
 	 *
+	 * @throws JacliExceptionAbort
 	 * @return mixed|string
-	 * @throws Exception
 	 */
 	public function getUserInput($message, $type = 'text', array $values = array(), $required = true)
 	{
@@ -240,7 +244,7 @@ JacliApplicationCli extends JApplicationCli
 		$retVal = trim($retVal);
 
 		if (!$retVal && $required)
-			throw new Exception('User abort', 666);
+			throw new JacliExceptionAbort('User abort');
 
 		return $retVal;
 	}

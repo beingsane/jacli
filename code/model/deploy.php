@@ -317,10 +317,14 @@ class JacliModelDeploy extends JModelBase
      */
     private function applyPatches()
     {
-        $this->out('Applying patches...');
+	    $patches = (array)$this->state->get('patches', array());
 
-        $patches = (array)$this->state->get('patches', array());
-        $targetDir = $this->state->get('targetDir');
+	    if(0 == count($patches))
+		    return $this;
+
+	    $this->out('Applying patches...');
+
+	    $targetDir = $this->state->get('targetDir');
 
         foreach($patches as $patchName)
         {
@@ -350,6 +354,9 @@ class JacliModelDeploy extends JModelBase
      */
     private function openInBrowser()
     {
+	    if($this->state->get('nobrowser'))
+		    return $this;
+
         $browserBin = $this->state->get('browserBin');
         $httpBase = $this->state->get('httpBase');
         $links = $this->interface->getBrowserLinks();

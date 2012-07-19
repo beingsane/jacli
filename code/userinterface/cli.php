@@ -34,14 +34,16 @@ class JacliUserinterfaceCli extends JacliUserinterface
 
 			case 'mchoice':
 				$this->application->out()
-					->out($message);
+					->output($message, true, 'yellow', '', 'bold')
+					->out();
 
 				foreach ($values as $i => $value)
 				{
 					$this->application->out(($i + 1).') '.$value);
 				}
 
-				$this->application->out('Select: ', false);
+				$this->application->out()
+					->output('Select: ', false, '', '', 'bold');
 
 				$ret = (int) $this->application->in();
 
@@ -50,7 +52,9 @@ class JacliUserinterfaceCli extends JacliUserinterface
 				break;
 
 			case 'yesno':
-				$this->application->out($message . ' [y/n]');
+				$this->application->out()
+				->output($message, false, '', '', 'bold')
+					->output(' [y/n]');
 
 				$resp = $this->application->in();
 
@@ -68,14 +72,13 @@ class JacliUserinterfaceCli extends JacliUserinterface
 						$this->application->out('Please select either [y]es or [n]no');
 
 						// recourse...
-						$this->getUserInput($message, $type, $values);
+						return $this->getUserInput($message, $type, $values);
 				}
 
 				break;
-
-			default:
-				throw new UnexpectedValueException(__METHOD__ . ' - Invalid input type:' . $type);
 		}
+
+		throw new UnexpectedValueException(__METHOD__ . ' - Invalid input type:' . $type);
 	}
 
 	/**
@@ -100,22 +103,29 @@ class JacliUserinterfaceCli extends JacliUserinterface
 				$message = $nl.str_repeat('=', 60).$nl
 				.$message
 				.$nl.str_repeat('=', 60).$nl;
+
+				$this->application->out()
+					->output($message, true, '', '', 'bold')
+					->out();
 				break;
 
 			case 'warning':
-				$message = '**** WARNING: ' . $message;
+				$this->application->out()
+					->output('Warning: ', false, 'yellow', '', 'bold')
+					->output($message)
+					->out();
 				break;
 
 			case 'error':
-				$message = '**** ERROR: ' . $message;
+				$this->application->out()
+					->output('Error: ', false, 'red', '', 'bold')
+					->output($message)
+					->out();
 				break;
 
 			default:
 				throw new UnexpectedValueException(__METHOD__ . ' - Invalid message type');
 		}
-
-		// Display the message
-		$this->application->out($message);
 
 		return $this;
 	}
