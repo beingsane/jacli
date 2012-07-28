@@ -37,14 +37,14 @@ class JacliModelDatabase extends JModelBase
 		$this->connection = mysql_connect($options->get('db_host'), $options->get('db_user'), $options->get('db_pass'));
 
 		/*
-		$dbOptions = array(
-			'driver' => $options->get('db_type'),
-		);
+		 $dbOptions = array(
+		 		'driver' => $options->get('db_type'),
+		 );
 		$this->dbDriver = JDatabaseDriver::getInstance($options->toArray());
 		*/
 
 		if (!$this->connection)
-			throw new Exception(__METHOD__.' - Could not connect: ' . mysql_error(), 1);
+			throw new Exception(__METHOD__ . ' - Could not connect: ' . mysql_error(), 1);
 
 		$this->tablePrefix = $options->get('db_prefix');
 
@@ -99,7 +99,7 @@ class JacliModelDatabase extends JModelBase
 	public function deleteDb($dbName)
 	{
 		if (!$dbName)
-			throw new UnexpectedValueException(__METHOD__ . ' - Empty database name', 1);
+			throw new RuntimeException(__METHOD__ . ' - Empty database name', 1);
 
 		$res = mysql_query('SHOW DATABASES');
 
@@ -122,7 +122,7 @@ class JacliModelDatabase extends JModelBase
 		{
 			mysql_close($this->connection);
 
-			throw new Exception(__METHOD__ . ' - Error deleting database: ' . mysql_error(), 1);
+			throw new RuntimeException(__METHOD__ . ' - Error deleting database: ' . mysql_error(), 1);
 		}
 
 		return $this;
@@ -227,6 +227,7 @@ class JacliModelDatabase extends JModelBase
 
 	/**
 	 * @param $text
+	 *
 	 * @return string
 	 */
 	public function quote($text)

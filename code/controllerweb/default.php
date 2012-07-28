@@ -21,6 +21,5 @@ class JacliControllerWebDefault extends JControllerBase
 	 */
 	public function execute()
 	{
-		// TODO: Implement execute() method.
 	}
 }

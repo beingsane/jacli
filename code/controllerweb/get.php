@@ -20,6 +20,5 @@ class JacliControllerwebGet extends JControllerBase
 	 */
 	public function execute()
 	{
-		// TODO: Implement execute() method.
 	}
 }

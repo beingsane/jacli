@@ -44,13 +44,13 @@ class JacliApplicationWeb extends JApplicationWeb
 
 		$viewName = $this->input->get('view', $this->input->get('do', 'default'));
 
-		if( ! $viewName)
-			throw new RuntimeException(__METHOD__.' - No view');
+		if (!$viewName)
+			throw new RuntimeException(__METHOD__ . ' - No view');
 
-		$className = 'JacliView' . ucfirst($viewName).'View';
+		$className = 'JacliView' . ucfirst($viewName) . 'View';
 
 		$layouts = new SplPriorityQueue;
-		$layouts->insert(JPATH_BASE.'/view/'.$viewName.'/tmpl', 0);
+		$layouts->insert(JPATH_BASE . '/view/' . $viewName . '/tmpl', 0);
 
 		/* @var JViewHtml $view */
 		$view = new $className($model, $layouts);
@@ -81,7 +81,7 @@ class JacliApplicationWeb extends JApplicationWeb
 	 * Output a string.
 	 *
 	 * @param string $text
-	 * @param bool $nl
+	 * @param bool   $nl
 	 */
 	public function out($text = '', $nl = true)
 	{
@@ -104,14 +104,14 @@ class JacliApplicationWeb extends JApplicationWeb
 		return __METHOD__ . '---Missing value---' . $message;
 	}
 
-    /**
-     * Fetch the configuration data for the application.
-     *
-     * @param string $file
-     * @param string $class
-     *
-     * @return mixed|object An object to be loaded into the application configuration.@since   1.0
-     */
+	/**
+	 * Fetch the configuration data for the application.
+	 *
+	 * @param string $file
+	 * @param string $class
+	 *
+	 * @return mixed|object An object to be loaded into the application configuration.@since   1.0
+	 */
 	protected function fetchConfigurationData($file = '', $class = 'JConfig')
 	{
 		return JacliApplicationHelper::fetchConfigurationData($this->input->get('application'));
@@ -164,7 +164,7 @@ class JacliApplicationWeb extends JApplicationWeb
 		// If the requested controller exists let's use it.
 		if (class_exists($className))
 		{
-			return new $className;//($this->input, $this);
+			return new $className; //($this->input, $this);
 		}
 
 		// Nothing found. Don't Panic.

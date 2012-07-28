@@ -44,7 +44,7 @@ EOT;
 
 		/*
 		 * Create admin user
-		 */
+		*/
 
 		if (!$config->get('useacl'))
 			return $this;
@@ -59,7 +59,7 @@ EOT;
 			'admin,user'
 		));
 
-		$buffer = JFile::read($path.'/conf/users.auth.php.dist') . "\n$output\n";
+		$buffer = JFile::read($path . '/conf/users.auth.php.dist') . "\n$output\n";
 
 		if (!file_put_contents($path . '/conf/users.auth.php', $buffer))
 			throw new Exception('Unable to write users.auth.php', 1);

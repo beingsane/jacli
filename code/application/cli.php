@@ -27,20 +27,20 @@ JacliApplicationCli extends JApplicationCli
 
 	public function  doExecute()
 	{
-		if($this->input->get('nocolors'))
+		if ($this->input->get('nocolors'))
 		{
 			define('COLORS', 0);
 		}
 		else
 		{
 			//-- Got xampp and probs setting the include path ? eclipse ?..
-			set_include_path(get_include_path().PATH_SEPARATOR.'/opt/lampp/lib/php');
+			set_include_path(get_include_path() . PATH_SEPARATOR . '/opt/lampp/lib/php');
 
 			//-- El KuKu's ConsoleColor - see: http://elkuku.github.com/pear/
 			//@include 'elkuku/console/Color.php';
 
 			//-- OR -- PEAR's ConsoleColor
-			if(false == class_exists('Console_Color2')) @include 'Console/Color2.php';
+			if (false == class_exists('Console_Color2')) @include 'Console/Color2.php';
 
 			//-- Any color ?
 			define('COLORS', class_exists('Console_Color2'));
@@ -83,15 +83,15 @@ JacliApplicationCli extends JApplicationCli
 		}
 	}
 
-    /**
-     * Fetch the configuration data for the application.
-     *
-     * @param string $file
-     * @param string $class
-     *
-     * @return mixed|object An object to be loaded into the application configuration.
-     * @since   1.0
-     */
+	/**
+	 * Fetch the configuration data for the application.
+	 *
+	 * @param string $file
+	 * @param string $class
+	 *
+	 * @return mixed|object An object to be loaded into the application configuration.
+	 * @since   1.0
+	 */
 	protected function fetchConfigurationData($file = '', $class = 'JConfig')
 	{
 		return JacliApplicationHelper::fetchConfigurationData($this->input->get('application'));
@@ -199,29 +199,29 @@ JacliApplicationCli extends JApplicationCli
 	 */
 	public function output($text = '', $nl = true, $fg = '', $bg = '', $style = '')
 	{
-		if(false == $this->verbose)
+		if (false == $this->verbose)
 			return $this;
 
-		if(COLORS)
+		if (COLORS)
 		{
 			static $color = null;
 
-			if(is_null($color))
+			if (is_null($color))
 				$color = new Console_Color2;
 
-			if($fg) $this->out($color->fgcolor($fg), false);
-			if($bg) $this->out($color->bgcolor($bg), false);
+			if ($fg) $this->out($color->fgcolor($fg), false);
+			if ($bg) $this->out($color->bgcolor($bg), false);
 
-			if($style)
+			if ($style)
 			{
 				$cs = $color->getColorCodes();
-				$this->out("\033[".$cs['style'][$style].'m', false);
+				$this->out("\033[" . $cs['style'][$style] . 'm', false);
 			}
 		}
 
 		$this->out($text, $nl);
 
-		if(($fg || $bg || $style) && COLORS) $this->out($color->convert('%n'), false);
+		if (($fg || $bg || $style) && COLORS) $this->out($color->convert('%n'), false);
 
 		return $this;
 	}

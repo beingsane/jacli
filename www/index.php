@@ -10,7 +10,7 @@ version_compare(PHP_VERSION, '5.3', '>=') || die('This script requires PHP >= 5.
 // Bootstrap the application.
 $path = getenv('JACLI_HOME');
 
-define('JACLI_PATH_TEMPLATE', __DIR__.'/template');
+define('JACLI_PATH_TEMPLATE', __DIR__ . '/template');
 
 try
 {
@@ -38,7 +38,7 @@ try
 catch (Exception $e)
 {
 	// An exception has been caught, just echo the message.
-	echo '<p style="color: red">'.$e->getMessage().'</p>';
+	echo '<p style="color: red">' . $e->getMessage() . '</p>';
 
 	exit($e->getCode());
 }

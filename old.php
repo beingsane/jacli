@@ -25,7 +25,7 @@ define('DS', DIRECTORY_SEPARATOR);
 
 /*
  *  Mofify from here ->>
- */
+*/
 $browserExe = 'firefox';// C:\path\to\browser.exe
 $httpBase = 'http://indigogit2.kuku';// http://localhost
 
@@ -51,7 +51,7 @@ $options->admin_password = 'test';
 $options->admin_email = 'test@nik-it.de';
 /*
  * <<- Modify until here
- */
+*/
 
 echo 'Enter the directory to receive the export: ';
 $theDir = trim(fgets(STDIN));
@@ -71,20 +71,20 @@ $options->db_name = $theDir;
 
 /*
  * SVN checkout
- */
+*/
 echo 'Checking out the Joomla! trunk to:'.NL.$BASE.DS.$jTrunkDir.NL;
 $JSVN = 'http://joomlacode.org/svn/joomla/development/trunk';
 system('svn co '.$JSVN.' "'.$BASE.DS.$jTrunkDir.'"');
 
 /*
  * SVN export
- */
+*/
 echo "Exporting the Joomla! trunk to $theDir...";
 system('svn export "'.$BASE.DS.$jTrunkDir.'" "'.$BASE.DS.$theDir.'"');
 
 /*
  * DB install
- */
+*/
 $installSql = $BASE.'/'.$theDir.'/installation/sql/mysql/joomla.sql';
 
 if( ! file_exists($installSql))
@@ -106,14 +106,14 @@ echo 'OK'.NL;
 
 /*
  * Create configuration.php
- */
+*/
 echo 'Create configuration.php...';
 configHelper::createConfig($options, $BASE.DS.$theDir);
 echo 'OK'.NL;
 
 /*
  * Applying patches
- */
+*/
 
 echo 'Applying patches'.NL;
 
@@ -137,7 +137,7 @@ foreach($patches as $patch)
 
 /*
  * Open in browser
- */
+*/
 echo 'Open in browser: '.$browserExe.NL;
 system($browserExe.' '.$httpBase.'/'.$theDir.' &');
 system($browserExe.' '.$httpBase.'/'.$theDir.'/administrator &');
@@ -180,7 +180,7 @@ class configHelper
 		$registry->gzip = 0;
 		$registry->error_reporting = -1;
 		$registry->helpurl = 'http://help.joomla.org/proxy/index.php'
-			.'?option=com_help&amp;keyref=Help{major}{minor}:{keyref}';
+		.'?option=com_help&amp;keyref=Help{major}{minor}:{keyref}';
 		$registry->ftp_host = '';//$options->ftp_host;
 		$registry->ftp_port = '';//$options->ftp_port;
 		$registry->ftp_user = '';//$options->ftp_save ? $options->ftp_user : '';
@@ -448,18 +448,18 @@ class dbHelper extends JDatabase
 		$installdate = date('Y-m-d H:i:s');
 		$nullDate = '0000-00-00 00:00:00';
 		$query	= 'REPLACE INTO #__users SET'
-			. ' id = 42'
-			. ', name = '.$this->quote('Super User')
-			. ', username = '.$this->quote($options->admin_user)
-			. ', email = '.$this->quote($options->admin_email)
-			. ', password = '.$this->quote($cryptpass)
-			. ', usertype = '.$this->quote('deprecated')		// Need to weed out where this is used
-			. ', block = 0'
-			. ', sendEmail = 1'
-			. ', registerDate = '.$this->quote($installdate)
-			. ', lastvisitDate = '.$this->quote($nullDate)
-			. ', activation = '.$this->quote('')
-			. ', params = '.$this->quote('');
+		. ' id = 42'
+		. ', name = '.$this->quote('Super User')
+		. ', username = '.$this->quote($options->admin_user)
+		. ', email = '.$this->quote($options->admin_email)
+		. ', password = '.$this->quote($cryptpass)
+		. ', usertype = '.$this->quote('deprecated')		// Need to weed out where this is used
+		. ', block = 0'
+		. ', sendEmail = 1'
+		. ', registerDate = '.$this->quote($installdate)
+		. ', lastvisitDate = '.$this->quote($nullDate)
+		. ', activation = '.$this->quote('')
+		. ', params = '.$this->quote('');
 
 		$this->setQuery($query);
 
@@ -468,7 +468,7 @@ class dbHelper extends JDatabase
 
 		// Map the super admin to the Super Admin Group
 		$query = 'REPLACE INTO #__user_usergroup_map'
-			.' SET user_id = 42, group_id = 8';
+		.' SET user_id = 42, group_id = 8';
 
 		$this->setQuery($query);
 
@@ -522,7 +522,7 @@ class dbHelper extends JDatabase
 				$in_string = false;
 			}
 			else if( ! $in_string && ($sql[$i] == '"' || $sql[$i] == "'")
-				&& ( ! isset($buffer[0]) || $buffer[0] != "\\"))
+					&& ( ! isset($buffer[0]) || $buffer[0] != "\\"))
 			{
 				$in_string = $sql[$i];
 			}
@@ -583,7 +583,7 @@ class dbHelper extends JDatabase
 				$j = $n;
 
 			$literal .= str_replace($prefix, $this->_table_prefix
-				, substr($sql, $startPos, $j - $startPos));
+					, substr($sql, $startPos, $j - $startPos));
 
 			$startPos = $j;
 
@@ -668,7 +668,7 @@ class passwordHelper
 		$stat = @stat(__FILE__);
 
 		if(empty($stat)
-			|| ! is_array($stat))
+				|| ! is_array($stat))
 			$stat = array(php_uname());
 
 		mt_srand(crc32(microtime().implode('|', $stat)));

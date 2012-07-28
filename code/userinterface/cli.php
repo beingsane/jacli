@@ -39,7 +39,7 @@ class JacliUserinterfaceCli extends JacliUserinterface
 
 				foreach ($values as $i => $value)
 				{
-					$this->application->out(($i + 1).') '.$value);
+					$this->application->out(($i + 1) . ') ' . $value);
 				}
 
 				$this->application->out()
@@ -53,12 +53,12 @@ class JacliUserinterfaceCli extends JacliUserinterface
 
 			case 'yesno':
 				$this->application->out()
-				->output($message, false, '', '', 'bold')
+					->output($message, false, '', '', 'bold')
 					->output(' [y/n]');
 
 				$resp = $this->application->in();
 
-				switch($resp)
+				switch ($resp)
 				{
 					case 'y':
 						return 0;
@@ -84,7 +84,7 @@ class JacliUserinterfaceCli extends JacliUserinterface
 	/**
 	 * Display an error message.
 	 *
-	 * @param mixed $message array or string
+	 * @param mixed  $message array or string
 	 * @param string $type
 	 *
 	 * @throws UnexpectedValueException
@@ -97,12 +97,12 @@ class JacliUserinterfaceCli extends JacliUserinterface
 
 		$message = implode($nl, (array) $message);
 
-		switch($type)
+		switch ($type)
 		{
 			case 'message':
-				$message = $nl.str_repeat('=', 60).$nl
-				.$message
-				.$nl.str_repeat('=', 60).$nl;
+				$message = $nl . str_repeat('=', 60) . $nl
+					. $message
+					. $nl . str_repeat('=', 60) . $nl;
 
 				$this->application->out()
 					->output($message, true, '', '', 'bold')

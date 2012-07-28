@@ -7,4 +7,6 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class JacliExceptionAbort extends Exception {}
+class JacliExceptionAbort extends Exception
+{
+}

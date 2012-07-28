@@ -20,14 +20,13 @@
 					<li>
 						<h2 id="appLabel">Application</h2> <?= $this->lists['appversion'] ?>
 					</li>
-					<li>
-						<label for="target">Target folder </label><input type="text" id="target" name="target"/>
+					<li><label for="target">Target folder </label><input type="text"
+					                                                     id="target" name="target"/>
 					</li>
 					<li><h3>Primary Configuration</h3></li>
 					<? foreach ($this->cfg as $key => $v) : ?>
-					<li>
-						<label for="<?= $key ?>"><?= ucfirst($key) ?></label>
-						<input id="<?= $key ?>" name="<?= $key ?>" value="<?= $v ?>"/>
+					<li><label for="<?= $key ?>"><?= ucfirst($key) ?> </label> <input
+						id="<?= $key ?>" name="<?= $key ?>" value="<?= $v ?>"/>
 					</li>
 					<? endforeach; ?>
 				</ul>
@@ -38,7 +37,7 @@
 			<div class="well">
 				<h3>Application configuration</h3>
 
-				<p>This values will override the primary configuration.</p>
+				<p>These values will override the primary configuration.</p>
 
 				<div id="appConfig">
 					<!-- Application configuration -->

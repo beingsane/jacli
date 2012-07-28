@@ -34,7 +34,7 @@ abstract class JacliUserinterface
 	/**
 	 * Display an error message.
 	 *
-	 * @param mixed $message array or string
+	 * @param mixed  $message array or string
 	 * @param string $type
 	 *
 	 * @throws UnexpectedValueException

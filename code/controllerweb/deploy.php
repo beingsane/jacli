@@ -21,12 +21,11 @@ class JacliControllerwebDeploy extends JControllerBase
 	 */
 	public function execute()
 	{
-		// TODO: Implement execute() method.
-
-		if (JFactory::getApplication()->input->get('target')):
+		if (JFactory::getApplication()->input->get('target'))
+		{
 			$model = new JacliModelDeploy(new JRegistry(JFactory::getApplication()->getConfig()));
 
 			$model->deploy();
-		endif;
+		}
 	}
 }

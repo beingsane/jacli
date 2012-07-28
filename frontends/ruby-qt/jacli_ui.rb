@@ -7,7 +7,7 @@
 ** WARNING! All changes made in this file will be lost when recompiling ui file!
 =end
 
-require 'korundum4'
+#//require 'korundum4'
 
 class Ui_MainWindow
     attr_reader :centralwidget

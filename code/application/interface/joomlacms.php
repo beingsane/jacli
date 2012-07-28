@@ -254,7 +254,7 @@ class JacliApplicationInterfaceJoomlacms extends JacliApplicationInterface
 
 		if (!JFolder::delete($this->config->get('targetDir') . '/installation'))
 			throw new Exception(sprintf(
-				'Unable to delete the folder: %s', $this->config->get('targetDir') . '/installation')
+					'Unable to delete the folder: %s', $this->config->get('targetDir') . '/installation')
 				, 1);
 
 		$this->out('ok');

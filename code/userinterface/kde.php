@@ -56,7 +56,7 @@ class JacliUserinterfaceKde extends JacliUserinterface
 	/**
 	 * Display an error message.
 	 *
-	 * @param mixed $message array or string
+	 * @param mixed  $message array or string
 	 * @param string $type
 	 *
 	 * @throws UnexpectedValueException
@@ -64,9 +64,9 @@ class JacliUserinterfaceKde extends JacliUserinterface
 	 */
 	public function displayMessage($message, $type = 'message')
 	{
-		$message =  implode("\n", (array) $message);
+		$message = implode("\n", (array) $message);
 
-		switch($type)
+		switch ($type)
 		{
 			case 'message':
 				$kType = 'msgbox';
@@ -85,7 +85,7 @@ class JacliUserinterfaceKde extends JacliUserinterface
 		}
 
 		// Display the message
-		shell_exec('kdialog --'.$kType.' "' . $message . '"');
+		shell_exec('kdialog --' . $kType . ' "' . $message . '"');
 
 		return $this;
 	}

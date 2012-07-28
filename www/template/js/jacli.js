@@ -1,9 +1,9 @@
-Jacli = new Class ({
-    changeApp:function(e, cName) {
+Jacli = new Class({
+    changeApp:function (e, cName) {
         var sel = e.options[e.selectedIndex].value;
         var container = document.id(cName);
 
-        if(0 == sel)
+        if (0 == sel)
             return false;
 
         parts = sel.split('|');
@@ -15,22 +15,20 @@ Jacli = new Class ({
         new Request.JSON({
             url:'index.php?do=get&item=appconfig&app=' + parts[0],
 
-            onRequest : function() {
+            onRequest:function () {
                 // @todo spinner
             },
 
-            onComplete : function(response) {
-                if(response.status)
-                {
-                    container.innerHTML = '<p style="color: red;">'+ response.debug+'</p>'+ response.text;
+            onComplete:function (response) {
+                if (response.status) {
+                    container.innerHTML = '<p style="color: red;">' + response.debug + '</p>' + response.text;
                 }
-                else
-                {
+                else {
                     container.set('html', response.text);
                 }
             },
 
-            onFailure : function() {
+            onFailure:function () {
                 // @todo error handling
                 container.set('html', 'The request failed');
             }

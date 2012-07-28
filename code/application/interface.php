@@ -52,7 +52,7 @@ abstract class JacliApplicationInterface
 		$sourceDir = PATH_REPOSITORIES . '/' . $targetApplication . '/' . $version->version;
 
 		$downloader = new JacliModelDownloader($this->config);
-//		$sourceDir = $this->config->get('sourceDir');
+		//		$sourceDir = $this->config->get('sourceDir');
 
 		switch ($version->type)
 		{
@@ -60,7 +60,7 @@ abstract class JacliApplicationInterface
 				if (!JFolder::exists($sourceDir))
 					$downloader->download($sourceDir, $version);
 
-			//	$subDir = (string) $version->subfolder;
+				//	$subDir = (string) $version->subfolder;
 
 				if ($version->subfolder)
 					$sourceDir .= '/' . $version->subfolder;

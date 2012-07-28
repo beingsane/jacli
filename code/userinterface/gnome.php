@@ -31,7 +31,7 @@ class JacliUserinterfaceGnome extends JacliUserinterface
 				break;
 
 			case 'mchoice':
-				$vs = "\n".implode(" \\\n", $values);
+				$vs = "\n" . implode(" \\\n", $values);
 
 				return shell_exec("zenity --list --title=\"$message\" --column=\"$message\" \\$vs");
 
@@ -51,7 +51,7 @@ class JacliUserinterfaceGnome extends JacliUserinterface
 	/**
 	 * Display an error message.
 	 *
-	 * @param mixed $message array or string
+	 * @param mixed  $message array or string
 	 * @param string $type
 	 *
 	 * @throws UnexpectedValueException
@@ -59,9 +59,9 @@ class JacliUserinterfaceGnome extends JacliUserinterface
 	 */
 	public function displayMessage($message, $type = 'message')
 	{
-		$message =  implode("\n", (array) $message);
+		$message = implode("\n", (array) $message);
 
-		switch($type)
+		switch ($type)
 		{
 			case 'message':
 				$gType = 'info';

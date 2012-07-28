@@ -28,8 +28,8 @@ class JacliApplicationInterfaceWordpress extends JacliApplicationInterface
 
 		$installSql = $this->sourceDir . '/installation/sql/mysql/joomla.sql';
 
-		if (0)//!file_exists($installSql))
-			throw new Exception(__METHOD__.' - Install SQL file not found in ' . $installSql, 1);
+		if (0) //!file_exists($installSql))
+			throw new Exception(__METHOD__ . ' - Install SQL file not found in ' . $installSql, 1);
 
 		$this->config->set('site_name', 'TEST ' . $this->config->get('target'));
 		$this->config->set('db_name', $this->config->get('target'));

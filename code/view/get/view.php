@@ -29,7 +29,7 @@ class JacliViewGetView extends JacliViewJson
 		{
 			$item = $input->get('item');
 
-			if( ! method_exists($this, $item))
+			if (!method_exists($this, $item))
 				throw new RuntimeException(__METHOD__ . ' - Invalid do action: ' . $item);
 
 			$this->$item();

@@ -1,9 +1,9 @@
 <?php
-	/**
-	 * User: elkuku
-	 * Date: 11.05.12
-	 * Time: 11:36
-	 */
+/**
+ * User: elkuku
+ * Date: 11.05.12
+ * Time: 11:36
+ */
 class JacliControllerListapps extends JControllerBase
 {
 

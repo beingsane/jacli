@@ -10,7 +10,7 @@ class Jacli < Qt::MainWindow
 
     @ui = Ui::MainWindow.new
     @ui.setup_ui(self)
-    @base_dir = "/home/elkuku/stormspace/jacli/config"
+    @base_dir = "/home/jtester/repos/jacli/config"
 
     # puts File.expand_path File.dirname(__FILE__)
     #               puts Dir.pwd
